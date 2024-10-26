@@ -6,7 +6,7 @@ import (
 )
 
 func GetAllBooks(c *gin.Context) {
-	data := []gin.H{{"id": "1", "name": "Book 1"}, {"id": "2", "name": "Book 2"}}
+	data := []gin.H{{"ID": 1, "BookID": "1", "BookName": "Book 1"}, {"ID": 2, "BookId": "2", "BookName": "Book 2"}}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data})
 }

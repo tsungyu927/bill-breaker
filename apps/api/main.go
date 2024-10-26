@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tsungyu927/bill-breaker/api/middlewares"
 	"github.com/tsungyu927/bill-breaker/api/routers"
+	"github.com/tsungyu927/bill-breaker/api/constants"
 )
 
 func main() {
@@ -12,9 +14,9 @@ func main() {
 	router := gin.Default()
 	
 	// Middleware
-	// TODO: add CORS, Auth middlewares
+	router.Use(middlewares.CORSMiddleware(constants.APIWhitelist))
 
-	// v1
+	// v1 routers
 	v1 := router.Group("api/v1")
 	routers.BookRegister(v1)	
 
