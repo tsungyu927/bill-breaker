@@ -26,7 +26,7 @@ func main() {
 	// v1 routers
 	v1 := router.Group("api/v1")
 	routers.BookRegister(v1)	
-
+	routers.UserRegister(v1)
 
 	// Run
 	router.Run("localhost:8080")

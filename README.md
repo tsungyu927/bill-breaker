@@ -6,9 +6,9 @@
 
 ### Scenario
 
-* Traveling with friends
-* Renting house together
-* ...etc
+- Traveling with friends
+- Renting house together
+- ...etc
 
 ## Features
 
@@ -31,3 +31,12 @@
 🚩 Notification (remind to pay)
 
 🚩 History stats
+
+## User flow
+
+```mermaid
+flowchart LR
+    A[Enter Bill Breaker] --> B{Check userId in localstorage}
+    B -->|Exist| C[To book list page]
+    B -->|Not Exist| D[To create user page]
+```
