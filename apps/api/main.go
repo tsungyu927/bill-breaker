@@ -4,12 +4,19 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/joho/godotenv/autoload"
+
 	"github.com/tsungyu927/bill-breaker/api/middlewares"
 	"github.com/tsungyu927/bill-breaker/api/routers"
 	"github.com/tsungyu927/bill-breaker/api/constants"
+	"github.com/tsungyu927/bill-breaker/api/db"
 )
 
 func main() {
+	// Init database
+	db.InitDB()
+	defer db.CloseDB()
+
 	// Init gin
 	router := gin.Default()
 	

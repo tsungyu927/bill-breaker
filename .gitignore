@@ -1,2 +1,5 @@
 # FE Dependencies
 /node_modules
+
+# env
+.env*
