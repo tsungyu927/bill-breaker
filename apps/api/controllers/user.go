@@ -14,22 +14,14 @@ func CreateNewUser(c *gin.Context) {
 	var req validators.CreateUserRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		errMsg := []string{"Invalid input"}
-		errRes := utils.ErrorResponse(errMsg)
-
 		log.Println(err)
-		
-		c.JSON(http.StatusBadRequest, errRes)	
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid input"))	
 		return
 	}
 
 	if err := validators.ValidateCreateUser(req); err != nil {
-		errMsg := []string{err.Error()}
-		errRes := utils.ErrorResponse(errMsg)
-
 		log.Println(err)
-
-		c.JSON(http.StatusBadRequest, errRes)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
 		return
 	}
 
@@ -40,17 +32,11 @@ func CreateNewUser(c *gin.Context) {
 	}
 
 	if err := user.Create(); err != nil {
-		errMsg := []string{"Failed to create user"}
-		errRes := utils.ErrorResponse(errMsg)
-
 		log.Println(err)
-
-		c.JSON(http.StatusInternalServerError, errRes)
+		c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to create user"))
 		return
 	}
-
 	
 	response := utils.SuccessResponse(gin.H{"id": user.ID})
 	c.JSON(http.StatusOK, response)
 }
-
