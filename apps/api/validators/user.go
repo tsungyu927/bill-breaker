@@ -13,7 +13,7 @@ type CreateUserRequest struct {
 }
 
 type GetUserRequest struct {
-	ID string `json:"id" validate:"required,uuid4"`
+	ID string `uri:"id" validate:"required,uuid4"`
 }
 
 func ValidateCreateUser(data CreateUserRequest) error {

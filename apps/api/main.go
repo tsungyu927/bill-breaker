@@ -1,18 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 
+	"github.com/tsungyu927/bill-breaker/api/constants"
+	"github.com/tsungyu927/bill-breaker/api/db"
 	_ "github.com/tsungyu927/bill-breaker/api/docs"
 	"github.com/tsungyu927/bill-breaker/api/middlewares"
 	"github.com/tsungyu927/bill-breaker/api/routers"
-	"github.com/tsungyu927/bill-breaker/api/constants"
-	"github.com/tsungyu927/bill-breaker/api/db"
 )
 
 // @title Bill Breaker API
@@ -40,8 +45,36 @@ func main() {
 	// Swagger
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Run
-	router.Run("localhost:8080")
+	// Start server
+	srv := &http.Server{
+		Addr: ":8080",
+		Handler: router,
+	}
 
-	fmt.Println("Hi, I'm getting started")	
+	go func() {
+		// Service connections
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Server error: %v\n", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown ther server with a timeout of 5 seconds
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	log.Printf("Shutdown server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Attempt to graceful server shutdown
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal("Server shutdown: ", err)
+	}
+
+	// Close database connection
+	log.Println("Closing database connection...")
+	db.CloseDB()
+
+	log.Println("Server exiting")
 }

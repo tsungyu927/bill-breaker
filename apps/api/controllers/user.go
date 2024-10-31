@@ -55,3 +55,34 @@ func CreateNewUser(c *gin.Context) {
 	response := utils.SuccessResponse(userResponse)
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary Get user
+// @Description get user by id
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} utils.APIResponse{data=models.User} "success"
+// @Failure 400 {object} utils.APIResponse "bad request"
+// @Failure 404 {object} utils.APIResponse "not found"
+// @Failure 500 {object} utils.APIResponse "internal server error"
+// @Router /user/{id} [get]
+func GetUserByUserId(c *gin.Context) {
+	userID := c.Param("id")
+
+	if err := validators.ValidateGetUser(validators.GetUserRequest{ID: userID}); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
+		return
+	}
+
+	var user models.User
+	if err := user.Get(userID); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to get user"))
+		return
+	}
+
+	response := utils.SuccessResponse(user)
+	c.JSON(http.StatusOK, response)
+}
