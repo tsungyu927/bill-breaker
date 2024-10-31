@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/user": {
+        "/api/v1/user": {
             "post": {
                 "description": "create new user with new device_id",
                 "consumes": [
@@ -79,7 +79,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{id}": {
+        "/api/v1/user/{id}": {
             "get": {
                 "description": "get user by id",
                 "consumes": [
@@ -212,7 +212,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Bill Breaker API",
 	Description:      "This is the API of Bill Breaker",

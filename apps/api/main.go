@@ -25,7 +25,6 @@ import (
 // @description This is the API of Bill Breaker
 
 // @host localhost:8080
-// @BasePath /api/v1
 func main() {
 	// Init database
 	db.InitDB()

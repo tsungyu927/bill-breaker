@@ -21,7 +21,7 @@ import (
 // @Failure 400 {object} utils.APIResponse "bad request"
 // @Failure 404 {object} utils.APIResponse "not found"
 // @Failure 500 {object} utils.APIResponse "internal server error"
-// @Router /user [post]
+// @Router /api/v1/user [post]
 func CreateNewUser(c *gin.Context) {
 	var req validators.CreateUserRequest
 
@@ -66,7 +66,7 @@ func CreateNewUser(c *gin.Context) {
 // @Failure 400 {object} utils.APIResponse "bad request"
 // @Failure 404 {object} utils.APIResponse "not found"
 // @Failure 500 {object} utils.APIResponse "internal server error"
-// @Router /user/{id} [get]
+// @Router /api/v1/user/{id} [get]
 func GetUserByUserId(c *gin.Context) {
 	userID := c.Param("id")
 

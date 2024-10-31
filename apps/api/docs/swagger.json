@@ -7,9 +7,8 @@
         "version": "1.0"
     },
     "host": "localhost:8080",
-    "basePath": "/api/v1",
     "paths": {
-        "/user": {
+        "/api/v1/user": {
             "post": {
                 "description": "create new user with new device_id",
                 "consumes": [
@@ -73,7 +72,7 @@
                 }
             }
         },
-        "/user/{id}": {
+        "/api/v1/user/{id}": {
             "get": {
                 "description": "get user by id",
                 "consumes": [
