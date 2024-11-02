@@ -27,7 +27,7 @@ func CreateNewUser(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Println(err)
-		c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid input"))	
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid input"))
 		return
 	}
 
@@ -39,8 +39,8 @@ func CreateNewUser(c *gin.Context) {
 
 	user := models.User{
 		DeviceId: req.DeviceId,
-		Name: req.Name,
-		Email: req.Email,
+		Name:     req.Name,
+		Email:    req.Email,
 	}
 
 	if err := user.Create(); err != nil {

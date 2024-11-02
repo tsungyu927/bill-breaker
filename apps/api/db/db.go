@@ -12,13 +12,13 @@ import (
 
 var (
 	dbPool *pgxpool.Pool
-	once sync.Once
+	once   sync.Once
 )
 
 func InitDB() *pgxpool.Pool {
 	once.Do(func() {
 		dbURL := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
-		
+
 		log.Printf("dbURL: %v\n", dbURL)
 		if dbURL == "" {
 			// DB_URL not found
@@ -37,7 +37,7 @@ func InitDB() *pgxpool.Pool {
 }
 
 func GetDB() *pgxpool.Pool {
-	return dbPool	
+	return dbPool
 }
 
 func CloseDB() {

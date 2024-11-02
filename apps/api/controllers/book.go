@@ -17,6 +17,5 @@ func GetAllBooks(c *gin.Context) {
 func CreateNewBook(c *gin.Context) {
 
 	response := utils.SuccessResponse("")
-	c.JSON(http.StatusOK, response)	
+	c.JSON(http.StatusOK, response)
 }
-		

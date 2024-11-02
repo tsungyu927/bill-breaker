@@ -9,5 +9,3 @@ func BookRegister(router *gin.RouterGroup) {
 	router.GET("/books", controllers.GetAllBooks)
 	router.POST("/book", controllers.CreateNewBook)
 }
-
-

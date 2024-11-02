@@ -10,8 +10,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/tsungyu927/bill-breaker/api/constants"
 	"github.com/tsungyu927/bill-breaker/api/db"
@@ -32,13 +32,13 @@ func main() {
 
 	// Init gin
 	router := gin.Default()
-	
+
 	// Middleware
 	router.Use(middlewares.CORSMiddleware(constants.APIWhitelist))
 
 	// v1 routers
 	v1 := router.Group("api/v1")
-	routers.BookRegister(v1)	
+	routers.BookRegister(v1)
 	routers.UserRegister(v1)
 
 	// Swagger
@@ -46,7 +46,7 @@ func main() {
 
 	// Start server
 	srv := &http.Server{
-		Addr: ":8080",
+		Addr:    ":8080",
 		Handler: router,
 	}
 
