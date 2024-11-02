@@ -10,6 +10,19 @@
 - Renting house together
 - ...etc
 
+## Getting Started
+
+### Start API server
+```bash
+cd apps/api
+
+# Build docker image
+docker build -t tsungyu927/bill-breaker-api .
+
+# Run container with image (& .env file) and expose to 8080 port
+docker run --env-file .env -p 8080:8080 -it tsungyu927/bill-breaker-api
+```
+
 ## API
 
 [Swagger](localhost:8080/swagger/index.html)
