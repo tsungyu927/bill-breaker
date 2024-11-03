@@ -1,7 +1,8 @@
 import { fetchBookList } from "@/src/server/axios/book";
 import { useQuery } from "@tanstack/react-query";
 
-function Homepage() {
+function BookDetail() {
+  //TODO: 參數需要改成 require both user_id & book_id
   const { data: books, isLoading } = useQuery({
     queryKey: ["books"],
     queryFn: fetchBookList,
@@ -19,4 +20,4 @@ function Homepage() {
   ));
 }
 
-export default Homepage;
+export default BookDetail;

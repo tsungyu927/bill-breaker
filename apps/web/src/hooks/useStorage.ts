@@ -5,37 +5,37 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import { getStorage, setStorage } from "../utils/storages";
 
 type StorageType = typeof window.localStorage | typeof window.sessionStorage;
 
-export function useLocalStorage<T>(key: string, defaultValue: T) {
-  return useStorage(key, defaultValue, window.localStorage);
+export function useLocalStorage(key: string) {
+  return useStorage(key, window.localStorage);
 }
 
-export function useSessionStorage<T>(key: string, defaultValue: T) {
-  return useStorage(key, defaultValue, window.sessionStorage);
+export function useSessionStorage(key: string) {
+  return useStorage(key, window.sessionStorage);
 }
 
-function useStorage<T>(
+function useStorage(
   key: string,
-  defaultValue: T,
   storageObject: StorageType
-): [T, Dispatch<SetStateAction<T>>, () => void] {
+): {
+  value: string | null;
+  setValue: Dispatch<SetStateAction<string | null>>;
+  remove: () => void;
+} {
   const [value, setValue] = useState(() => {
-    const jsonValue = storageObject.getItem(key);
-
-    if (jsonValue != null) return JSON.parse(jsonValue);
-    return defaultValue;
+    return getStorage(key, storageObject);
   });
 
   useEffect(() => {
-    if (value === undefined) return storageObject.removeItem(key);
-    storageObject.setItem(key, JSON.stringify(value));
+    setStorage(key, value, storageObject);
   }, [key, value, storageObject]);
 
   const remove = useCallback(() => {
-    setValue(undefined as unknown as T);
+    setValue(null);
   }, []);
 
-  return [value, setValue, remove];
+  return { value, setValue, remove };
 }
