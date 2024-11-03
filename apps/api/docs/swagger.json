@@ -142,9 +142,6 @@
                 "created_at": {
                     "type": "string"
                 },
-                "device_id": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -182,13 +179,9 @@
         "validators.CreateUserRequest": {
             "type": "object",
             "required": [
-                "device_id",
                 "name"
             ],
             "properties": {
-                "device_id": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
                 },

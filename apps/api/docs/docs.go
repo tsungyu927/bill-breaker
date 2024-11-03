@@ -149,9 +149,6 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
-                "device_id": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -189,13 +186,9 @@ const docTemplate = `{
         "validators.CreateUserRequest": {
             "type": "object",
             "required": [
-                "device_id",
                 "name"
             ],
             "properties": {
-                "device_id": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
                 },

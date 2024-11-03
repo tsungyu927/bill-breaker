@@ -3,8 +3,6 @@ definitions:
     properties:
       created_at:
         type: string
-      device_id:
-        type: string
       email:
         type: string
       id:
@@ -29,15 +27,12 @@ definitions:
     type: object
   validators.CreateUserRequest:
     properties:
-      device_id:
-        type: string
       email:
         type: string
       name:
         minLength: 1
         type: string
     required:
-    - device_id
     - name
     type: object
 host: localhost:8080

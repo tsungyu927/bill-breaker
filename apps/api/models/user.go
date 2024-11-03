@@ -9,7 +9,6 @@ import (
 
 type User struct {
 	ID             string    `json:"id"`
-	DeviceId       string    `json:"device_id"`
 	Name           string    `json:"name"`
 	Email          string    `json:"email,omitempty"`
 	CreatedAt      time.Time `json:"created_at"`
@@ -17,13 +16,13 @@ type User struct {
 }
 
 func (user *User) Create() error {
-	query := `INSERT INTO users (device_id, name, email) VALUES ($1, $2, $3) RETURNING id`
+	query := `INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id`
 
-	return db.GetDB().QueryRow(context.Background(), query, user.DeviceId, user.Name, user.Email).Scan(&user.ID)
+	return db.GetDB().QueryRow(context.Background(), query, user.Name, user.Email).Scan(&user.ID)
 }
 
 func (user *User) Get(userID string) error {
 	query := `SELECT * FROM users WHERE id = $1`
 
-	return db.GetDB().QueryRow(context.Background(), query, userID).Scan(&user.ID, &user.DeviceId, &user.Name, &user.Email, &user.CreatedAt, &user.LastModifiedAt)
+	return db.GetDB().QueryRow(context.Background(), query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.LastModifiedAt)
 }

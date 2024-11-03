@@ -38,9 +38,8 @@ func CreateNewUser(c *gin.Context) {
 	}
 
 	user := models.User{
-		DeviceId: req.DeviceId,
-		Name:     req.Name,
-		Email:    req.Email,
+		Name:  req.Name,
+		Email: req.Email,
 	}
 
 	if err := user.Create(); err != nil {
