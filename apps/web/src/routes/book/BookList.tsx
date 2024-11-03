@@ -1,4 +1,4 @@
-import { useLocalStorage } from "@/src/hooks/useStorage";
+import { useLocalStorage } from "@/hooks/useStorage";
 
 function BookList() {
   const { value: userId } = useLocalStorage("user_id");

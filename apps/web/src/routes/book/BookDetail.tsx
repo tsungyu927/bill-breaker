@@ -1,4 +1,4 @@
-import { fetchBookList } from "@/src/server/axios/book";
+import { fetchBookList } from "@/server/axios/book";
 import { useQuery } from "@tanstack/react-query";
 
 function BookDetail() {

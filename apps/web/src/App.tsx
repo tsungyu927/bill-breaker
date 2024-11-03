@@ -3,8 +3,8 @@ import {
   redirect,
   RouterProvider,
 } from "react-router-dom";
-import BookList from "@/src/routes/book/BookList";
-import ErrorPage from "@/src/routes/Error";
+import BookList from "@/routes/book/BookList";
+import ErrorPage from "@/routes/Error";
 import { useLocalStorage } from "./hooks/useStorage";
 import BookDetail from "./routes/book/BookDetail";
 

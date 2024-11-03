@@ -5,7 +5,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { getStorage, setStorage } from "../utils/storages";
+import { getStorage, setStorage } from "@/utils/storages";
 
 type StorageType = typeof window.localStorage | typeof window.sessionStorage;
 

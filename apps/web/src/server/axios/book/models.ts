@@ -1,4 +1,4 @@
-import { APIResponse } from "@/src/interface/api";
+import { APIResponse } from "@/interface/api";
 
 export interface BookModel {
   ID: number;
