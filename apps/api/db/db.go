@@ -7,6 +7,7 @@ import (
 	"os"
 	"sync"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -19,14 +20,16 @@ func InitDB() *pgxpool.Pool {
 	once.Do(func() {
 		dbURL := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
 
-		log.Printf("dbURL: %v\n", dbURL)
-		if dbURL == "" {
+		config, err := pgxpool.ParseConfig(dbURL)
+		if err != nil {
 			// DB_URL not found
 			log.Fatal("DB_URL environment variable not set")
 		}
 
-		var err error
-		dbPool, err = pgxpool.New(context.Background(), dbURL)
+		// Set QueryExecMode to avoid automatic statement caching
+		config.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+
+		dbPool, err = pgxpool.NewWithConfig(context.Background(), config)
 
 		if err != nil {
 			log.Fatalf("Unable to connect to database: %v\n", err)
