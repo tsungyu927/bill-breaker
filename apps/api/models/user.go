@@ -10,7 +10,7 @@ import (
 type User struct {
 	ID             string    `json:"id"`
 	Name           string    `json:"name"`
-	Email          string    `json:"email,omitempty"`
+	Email          *string   `json:"email,omitempty"`
 	CreatedAt      time.Time `json:"created_at"`
 	LastModifiedAt time.Time `json:"last_modified_at"`
 }

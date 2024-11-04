@@ -7,8 +7,8 @@ import (
 var validate = validator.New()
 
 type CreateUserRequest struct {
-	Name  string `json:"name" validate:"required,min=1"`
-	Email string `json:"email" validate:"omitempty,email"`
+	Name  string  `json:"name" validate:"required,min=1"`
+	Email *string `json:"email" validate:"omitempty,email"`
 }
 
 type GetUserRequest struct {
