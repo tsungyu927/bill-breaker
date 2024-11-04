@@ -5,12 +5,12 @@ import {
 } from "react-router-dom";
 import BookList from "@/routes/book/BookList";
 import ErrorPage from "@/routes/Error";
-import { useLocalStorage } from "./hooks/useStorage";
 import BookDetail from "./routes/book/BookDetail";
+import Layout from "./routes/Layout";
+import { useUser } from "./contexts/UserContext";
 
 export default function App() {
-  const { value: userId } = useLocalStorage("user_id");
-
+  const { userId } = useUser();
   const basePathLoader = async () => {
     return redirect("/book");
   };
@@ -24,21 +24,26 @@ export default function App() {
 
   const routers = createBrowserRouter([
     {
-      path: "/book",
-      element: <BookList />,
-    },
-    {
-      path: "/book/:bookId",
-      element: <BookDetail />,
-      loader: authLoader,
-    },
-    {
-      path: "/",
-      loader: basePathLoader,
-    },
-    {
-      path: "*",
-      errorElement: <ErrorPage />,
+      element: <Layout />,
+      children: [
+        {
+          path: "/book",
+          element: <BookList />,
+        },
+        {
+          path: "/book/:bookId",
+          element: <BookDetail />,
+          loader: authLoader,
+        },
+        {
+          path: "/",
+          loader: basePathLoader,
+        },
+        {
+          path: "*",
+          errorElement: <ErrorPage />,
+        },
+      ],
     },
   ]);
 

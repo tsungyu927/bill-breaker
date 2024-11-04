@@ -9,4 +9,12 @@ export interface UserModel {
   last_modified_at: string;
 }
 
+// Response
 export type UserResponse = APIResponse<UserModel>;
+export type CreateUserResponse = APIResponse<{ id: string }>;
+
+// Payload
+export interface CreateUserPayload {
+  name: string;
+  email?: string;
+}
