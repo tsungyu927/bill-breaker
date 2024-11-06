@@ -13,6 +13,7 @@
 ## Getting Started
 
 ### Start API server
+
 ```bash
 cd apps/api
 
@@ -21,6 +22,15 @@ docker build -t tsungyu927/bill-breaker-api .
 
 # Run container with image (& .env file) and expose to 8080 port
 docker run --env-file .env -p 8080:8080 -it tsungyu927/bill-breaker-api
+```
+
+### Start Web server
+
+```bash
+cd apps/web
+
+# Run web using pnpm (5173 port)
+pnpm run dev
 ```
 
 ## API
