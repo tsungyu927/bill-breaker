@@ -8,6 +8,70 @@
     },
     "host": "localhost:8080",
     "paths": {
+        "/api/v1/book": {
+            "post": {
+                "description": "create new book with book info and user_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Create new book",
+                "parameters": [
+                    {
+                        "description": "Create new book with info and user_id",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validators.CreateBookRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.CreateBookResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user": {
             "post": {
                 "description": "create new user with new device_id",
@@ -156,6 +220,29 @@
                 }
             }
         },
+        "responses.CreateBookResponse": {
+            "type": "object",
+            "properties": {
+                "book_description": {
+                    "type": "string"
+                },
+                "book_name": {
+                    "type": "string"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "creator_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_modified_at": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.CreateUserResponse": {
             "type": "object",
             "properties": {
@@ -172,6 +259,25 @@
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "validators.CreateBookRequest": {
+            "type": "object",
+            "required": [
+                "book_name",
+                "creator_id"
+            ],
+            "properties": {
+                "book_description": {
+                    "type": "string"
+                },
+                "book_name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "creator_id": {
                     "type": "string"
                 }
             }
