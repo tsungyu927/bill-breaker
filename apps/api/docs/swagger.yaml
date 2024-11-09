@@ -62,11 +62,8 @@ definitions:
       book_name:
         minLength: 1
         type: string
-      creator_id:
-        type: string
     required:
     - book_name
-    - creator_id
     type: object
   validators.CreateUserRequest:
     properties:
@@ -98,6 +95,11 @@ paths:
       - application/json
       description: create new book with book info and user_id
       parameters:
+      - description: User ID for authentication
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
       - description: Create new book with info and user_id
         in: body
         name: book
@@ -178,6 +180,48 @@ paths:
       tags:
       - books
   /api/v1/user:
+    get:
+      consumes:
+      - application/json
+      description: get user by id
+      parameters:
+      - description: User ID for authentication
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.User'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "404":
+          description: not found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Get user
+      tags:
+      - users
     post:
       consumes:
       - application/json
@@ -214,44 +258,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.APIResponse'
       summary: Create new user
-      tags:
-      - users
-  /api/v1/user/{id}:
-    get:
-      consumes:
-      - application/json
-      description: get user by id
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.APIResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.User'
-              type: object
-        "400":
-          description: bad request
-          schema:
-            $ref: '#/definitions/utils.APIResponse'
-        "404":
-          description: not found
-          schema:
-            $ref: '#/definitions/utils.APIResponse'
-        "500":
-          description: internal server error
-          schema:
-            $ref: '#/definitions/utils.APIResponse'
-      summary: Get user
       tags:
       - users
 swagger: "2.0"

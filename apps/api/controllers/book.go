@@ -16,6 +16,7 @@ import (
 // @Tags books
 // @Accept json
 // @Produce json
+// @Param X-User-ID header string true "User ID for authentication"
 // @Param book body validators.CreateBookRequest true "Create new book with info and user_id"
 // @Success 200 {object} utils.APIResponse{data=responses.CreateBookResponse} "success"
 // @Failure 400 {object} utils.APIResponse "bad request"
@@ -23,8 +24,14 @@ import (
 // @Failure 500 {object} utils.APIResponse "internal server error"
 // @Router /api/v1/book [post]
 func CreateNewBook(c *gin.Context) {
-	var req validators.CreateBookRequest
+	creatorID := c.Request.Header.Get("X-User-ID")
+	if creatorID == "" {
+		log.Println("Missing creator ID in header")
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse("Missing User ID"))
+		return
+	}
 
+	var req validators.CreateBookRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, utils.ErrorResponse("Invalid input"))
@@ -38,7 +45,7 @@ func CreateNewBook(c *gin.Context) {
 	}
 
 	book := models.BookModel{
-		CreatorID:       req.CreatorID,
+		CreatorID:       creatorID,
 		BookName:        req.BookName,
 		BookDescription: req.BookDescription,
 	}

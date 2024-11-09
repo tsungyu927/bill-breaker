@@ -30,6 +30,13 @@ const docTemplate = `{
                 "summary": "Create new book",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID for authentication",
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Create new book with info and user_id",
                         "name": "book",
                         "in": "body",
@@ -154,6 +161,73 @@ const docTemplate = `{
             }
         },
         "/api/v1/user": {
+            "get": {
+                "description": "get user by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID for authentication",
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "create new user with new device_id",
                 "consumes": [
@@ -190,68 +264,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/responses.CreateUserResponse"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "bad request",
-                        "schema": {
-                            "$ref": "#/definitions/utils.APIResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "schema": {
-                            "$ref": "#/definitions/utils.APIResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.APIResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/user/{id}": {
-            "get": {
-                "description": "get user by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.APIResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.User"
                                         }
                                     }
                                 }
@@ -370,8 +382,7 @@ const docTemplate = `{
         "validators.CreateBookRequest": {
             "type": "object",
             "required": [
-                "book_name",
-                "creator_id"
+                "book_name"
             ],
             "properties": {
                 "book_description": {
@@ -380,9 +391,6 @@ const docTemplate = `{
                 "book_name": {
                     "type": "string",
                     "minLength": 1
-                },
-                "creator_id": {
-                    "type": "string"
                 }
             }
         },

@@ -60,14 +60,15 @@ func CreateNewUser(c *gin.Context) {
 // @Tags users
 // @Accept json
 // @Produce json
+// @Param X-User-ID header string true "User ID for authentication"
 // @Param id path string true "User ID"
 // @Success 200 {object} utils.APIResponse{data=models.User} "success"
 // @Failure 400 {object} utils.APIResponse "bad request"
 // @Failure 404 {object} utils.APIResponse "not found"
 // @Failure 500 {object} utils.APIResponse "internal server error"
-// @Router /api/v1/user/{id} [get]
+// @Router /api/v1/user [get]
 func GetUserByUserId(c *gin.Context) {
-	userID := c.Param("id")
+	userID := c.Request.Header.Get("X-User-ID")
 
 	if err := validators.ValidateGetUser(validators.GetUserRequest{ID: userID}); err != nil {
 		log.Println(err)

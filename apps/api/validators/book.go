@@ -1,7 +1,6 @@
 package validators
 
 type CreateBookRequest struct {
-	CreatorID       string  `json:"creator_id" validate:"required,uuid4"`
 	BookName        string  `json:"book_name" validate:"required,min=1"`
 	BookDescription *string `json:"book_description" validate:"omitempty"`
 }
