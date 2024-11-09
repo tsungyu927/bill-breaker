@@ -11,13 +11,6 @@ import (
 	"github.com/tsungyu927/bill-breaker/api/validators"
 )
 
-func GetAllBooks(c *gin.Context) {
-	data := []gin.H{{"ID": 1, "BookID": "1", "BookName": "Book 1"}, {"ID": 2, "BookId": "2", "BookName": "Book 2"}}
-
-	response := utils.SuccessResponse(data)
-	c.JSON(http.StatusOK, response)
-}
-
 // @Summary Create new book
 // @Description create new book with book info and user_id
 // @Tags books
@@ -60,5 +53,38 @@ func CreateNewBook(c *gin.Context) {
 		BookModel: book,
 	}
 	response := utils.SuccessResponse(bookResponse)
+	c.JSON(http.StatusOK, response)
+}
+
+// @Summary Get book list
+// @Description get book list with user_id
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param X-User-ID header string true "User ID for authentication"
+// @Param book body validators.GetBookListRequest true "Get book list with user_id"
+// @Success 200 {object} utils.APIResponse{data=[]models.BookModel} "success"
+// @Failure 400 {object} utils.APIResponse "bad request"
+// @Failure 404 {object} utils.APIResponse "not found"
+// @Failure 500 {object} utils.APIResponse "internal server error"
+// @Router /api/v1/book/list [get]
+func GetAllBooks(c *gin.Context) {
+	userID := c.Request.Header.Get("X-User-ID")
+
+	if err := validators.ValidateGetBookList(validators.GetBookListRequest{ID: userID}); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
+		return
+	}
+
+	var book models.BookModel
+	books, err := book.GetBookList(userID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to get book list"))
+		return
+	}
+
+	response := utils.SuccessResponse(books)
 	c.JSON(http.StatusOK, response)
 }

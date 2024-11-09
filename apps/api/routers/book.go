@@ -6,6 +6,6 @@ import (
 )
 
 func BookRegister(router *gin.RouterGroup) {
-	router.GET("/books", controllers.GetAllBooks)
+	router.GET("/book/list", controllers.GetAllBooks)
 	router.POST("/book", controllers.CreateNewBook)
 }

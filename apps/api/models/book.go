@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/tsungyu927/bill-breaker/api/db"
@@ -50,6 +51,48 @@ func (book *BookModel) Create() error {
 	}
 
 	return nil
+}
+
+func (book *BookModel) GetBookList(userID string) ([]BookModel, error) {
+	query := `
+		SELECT
+			b.id,
+			b.creator_id,
+			b.book_name,
+			b.book_description,
+			b.created_at,
+			b.last_modified_at
+		FROM books b
+		JOIN book_members bm ON b.id = bm.book_id
+		WHERE bm.user_id = $1
+	`
+
+	rows, err := db.GetDB().Query(context.Background(), query, userID)
+	if err != nil {
+		return nil, errors.New("Failed to query books by User ID " + err.Error())
+	}
+	defer rows.Close()
+
+	var books []BookModel
+	for rows.Next() {
+		var b BookModel
+		err := rows.Scan(
+			&b.ID,
+			&b.CreatorID,
+			&b.BookName,
+			&b.BookDescription,
+			&b.CreatedAt,
+			&b.LastModifiedAt,
+		)
+
+		if err != nil {
+			return nil, errors.New("Failed to scan book: " + err.Error())
+		}
+
+		books = append(books, b)
+	}
+
+	return books, nil
 }
 
 func addBookMember(bookID, userID string) error {
