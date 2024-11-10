@@ -153,6 +153,77 @@
                 }
             }
         },
+        "/api/v1/book/{book_id}": {
+            "get": {
+                "description": "get book with book_id (and X-User-ID)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get book by book_id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID for authentication",
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Get book with book_id",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/validators.GetBookByIDRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.BookModel"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user": {
             "get": {
                 "description": "get user by id",
@@ -399,6 +470,17 @@
                 "name": {
                     "type": "string",
                     "minLength": 1
+                }
+            }
+        },
+        "validators.GetBookByIDRequest": {
+            "type": "object",
+            "required": [
+                "bookID"
+            ],
+            "properties": {
+                "bookID": {
+                    "type": "string"
                 }
             }
         },

@@ -95,6 +95,39 @@ func (book *BookModel) GetBookList(userID string) ([]BookModel, error) {
 	return books, nil
 }
 
+func (book *BookModel) GetBookByID(userID, bookID string) (*BookModel, error) {
+	query := `
+		SELECT
+			b.id,
+			b.creator_id,
+			b.book_name,
+			b.book_description,
+			b.created_at,
+			b.last_modified_at
+		FROM books b
+		INNER JOIN book_members bm ON b.id = bm.book_id
+		WHERE bm.user_id = $1 AND b.id = $2
+	`
+
+	row := db.GetDB().QueryRow(context.Background(), query, userID, bookID)
+	var result BookModel
+
+	err := row.Scan(
+		&result.ID,
+		&result.CreatorID,
+		&result.BookName,
+		&result.BookDescription,
+		&result.CreatedAt,
+		&result.LastModifiedAt,
+	)
+	if err != nil {
+		return nil, errors.New("Failed to get book by User ID and Book ID: " + err.Error())
+	}
+
+	return &result, nil
+
+}
+
 func addBookMember(bookID, userID string) error {
 	query := `INSERT INTO book_members (book_id, user_id) VALUES ($1, $2)`
 

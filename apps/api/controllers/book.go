@@ -95,3 +95,37 @@ func GetAllBooks(c *gin.Context) {
 	response := utils.SuccessResponse(books)
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary Get book by book_id
+// @Description get book with book_id (and X-User-ID)
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param X-User-ID header string true "User ID for authentication"
+// @Param book body validators.GetBookByIDRequest true "Get book with book_id"
+// @Success 200 {object} utils.APIResponse{data=models.BookModel} "success"
+// @Failure 400 {object} utils.APIResponse "bad request"
+// @Failure 404 {object} utils.APIResponse "not found"
+// @Failure 500 {object} utils.APIResponse "internal server error"
+// @Router /api/v1/book/{book_id} [get]
+func GetBookByID(c *gin.Context) {
+	userID := c.Request.Header.Get("X-User-ID")
+	bookID := c.Param("book_id")
+
+	if err := validators.ValidateGetBookByID(validators.GetBookByIDRequest{BookID: bookID}); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
+		return
+	}
+
+	var book models.BookModel
+	result, err := book.GetBookByID(userID, bookID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to get book by id"))
+		return
+	}
+
+	response := utils.SuccessResponse(result)
+	c.JSON(http.StatusOK, response)
+}

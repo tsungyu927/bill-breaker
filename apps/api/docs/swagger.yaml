@@ -75,6 +75,13 @@ definitions:
     required:
     - name
     type: object
+  validators.GetBookByIDRequest:
+    properties:
+      bookID:
+        type: string
+    required:
+    - bookID
+    type: object
   validators.GetBookListRequest:
     properties:
       id:
@@ -131,6 +138,50 @@ paths:
           schema:
             $ref: '#/definitions/utils.APIResponse'
       summary: Create new book
+      tags:
+      - books
+  /api/v1/book/{book_id}:
+    get:
+      consumes:
+      - application/json
+      description: get book with book_id (and X-User-ID)
+      parameters:
+      - description: User ID for authentication
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Get book with book_id
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/validators.GetBookByIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BookModel'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "404":
+          description: not found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Get book by book_id
       tags:
       - books
   /api/v1/book/list:
