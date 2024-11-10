@@ -1,3 +1,4 @@
+import { getStorage } from "@/utils/storages";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -10,6 +11,11 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    const userId = getStorage("user_id", window.localStorage);
+
+    if (userId) {
+      config.headers["X-User-ID"] = userId;
+    }
     return config;
   },
   (error) => Promise.reject(error)

@@ -1,12 +1,21 @@
 import { APIResponse } from "@/interface/api";
 
 export interface BookModel {
-  ID: number;
-  BookId: string;
-  BookName: string;
-  CreatedDate: number;
-  LastModifiedDate: number;
+  id: string;
+  creator_id: string;
+  book_name: string;
+  book_description?: string;
+  create_at: string;
+  last_modified_at: string;
 }
 
+// Response
+export type CreateBookResponse = APIResponse<BookModel>;
 export type BookListResponse = APIResponse<BookModel[]>;
 export type BookResponse = APIResponse<BookModel>;
+
+// Payload
+export type CreateBookPayload = Pick<
+  BookModel,
+  "book_name" | "book_description"
+>;
