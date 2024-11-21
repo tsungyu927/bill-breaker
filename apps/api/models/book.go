@@ -128,6 +128,15 @@ func (book *BookModel) GetBookByID(userID, bookID string) (*BookModel, error) {
 
 }
 
+func (book *BookModel) JoinBook(userID, bookID string) error {
+	err := addBookMember(bookID, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func addBookMember(bookID, userID string) error {
 	query := `INSERT INTO book_members (book_id, user_id) VALUES ($1, $2)`
 
