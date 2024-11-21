@@ -14,7 +14,7 @@ function BookList() {
     <div className="flex flex-col p-4">
       <div className="flex flex-1 flex-col gap-4 p-4">
         {bookList.map((book) => (
-          <BookCard {...book} />
+          <BookCard key={book.id} {...book} />
         ))}
       </div>
       <CreateBookDialog />

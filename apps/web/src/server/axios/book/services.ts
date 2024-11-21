@@ -2,6 +2,7 @@ import axiosInstance from "..";
 import { convertBookModelToBook } from "./converter";
 import {
   BookListResponse,
+  BookResponse,
   CreateBookPayload,
   CreateBookResponse,
 } from "./models";
@@ -26,10 +27,13 @@ export const fetchBookList = async () => {
   return data.data?.map(convertBookModelToBook) || [];
 };
 
-// export const fetchBookByBookId = async (bookId: string) => {
-//   const { data } = await axiosInstance.get<BookResponse>(
-//     `api/v1/book/${bookId}`
-//   );
+export const fetchBookByBookId = async (bookId: string) => {
+  const { data } = await axiosInstance.get<BookResponse>(
+    `api/v1/book/${bookId}`
+  );
 
-//   return data.data;
-// };
+  if (data.data) {
+    return convertBookModelToBook(data.data);
+  }
+  return null;
+};
