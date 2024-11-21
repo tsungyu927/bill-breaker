@@ -1,5 +1,6 @@
 import BookCard from "@/modules/book/BookCard";
 import CreateBookDialog from "@/modules/book/CreateBookDialog";
+import JoinBookDialog from "@/modules/book/JoinBookDialog";
 import { fetchBookList } from "@/server/axios/book";
 import { useQuery } from "@tanstack/react-query";
 
@@ -17,7 +18,10 @@ function BookList() {
           <BookCard key={book.id} {...book} />
         ))}
       </div>
-      <CreateBookDialog />
+      <div className="flex flex-col gap-2">
+        <CreateBookDialog />
+        <JoinBookDialog />
+      </div>
     </div>
   );
 }

@@ -5,6 +5,8 @@ import {
   BookResponse,
   CreateBookPayload,
   CreateBookResponse,
+  JoinBookPayload,
+  JoinBookResponse,
 } from "./models";
 
 export const createBook = async (payload: CreateBookPayload) => {
@@ -36,4 +38,8 @@ export const fetchBookByBookId = async (bookId: string) => {
     return convertBookModelToBook(data.data);
   }
   return null;
+};
+
+export const joinBook = async (payload: JoinBookPayload) => {
+  return axiosInstance.post<JoinBookResponse>(`api/v1/book/join`, payload);
 };

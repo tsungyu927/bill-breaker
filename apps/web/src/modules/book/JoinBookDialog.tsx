@@ -5,7 +5,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -16,23 +15,21 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { CreateBookForm } from "@/interface/book";
-import { createBook } from "@/server/axios/book";
-import { convertToCreateBookPayload } from "@/server/axios/book/converter";
+import { JoinBookForm } from "@/interface/book";
+import { joinBook } from "@/server/axios/book";
+import { convertToJoinBookPayload } from "@/server/axios/book/converter";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-const DEFAULT_FORM_VALUES: CreateBookForm = {
-  name: "",
-};
-
-function CreateBookDialog() {
+function JoinBookDialog() {
   const [open, setOpen] = useState(false);
+  const form = useForm<JoinBookForm>();
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
-    mutationFn: createBook,
+    mutationFn: joinBook,
     onSuccess: () => {
       setOpen(false);
       // Re-fetch the book list
@@ -41,41 +38,38 @@ function CreateBookDialog() {
       });
     },
   });
-  const form = useForm<CreateBookForm>({
-    defaultValues: DEFAULT_FORM_VALUES,
-  });
 
-  const handleCreateBook = (data: CreateBookForm) => {
-    mutate(convertToCreateBookPayload(data));
+  const handleJoinBook = (data: JoinBookForm) => {
+    mutate(convertToJoinBookPayload(data));
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create new book</Button>
+        <Button variant="secondary">Join the book</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create new book</DialogTitle>
+          <DialogTitle>Join the existed book</DialogTitle>
           <DialogDescription>
-            Please input below information for you new book
+            Please input Book ID to join the book
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleCreateBook)}
             className="flex flex-col gap-8"
+            onSubmit={form.handleSubmit(handleJoinBook)}
           >
             <div className="flex flex-col gap-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Name</FormLabel>
+                    <FormLabel required>Book ID</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Please input the book name"
+                        placeholder="Please input the book id"
                         required
                         {...field}
                       />
@@ -83,21 +77,9 @@ function CreateBookDialog() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
             </div>
             <DialogFooter>
-              <Button type="submit">Create</Button>
+              <Button type="submit">Join</Button>
             </DialogFooter>
           </form>
         </Form>
@@ -106,4 +88,4 @@ function CreateBookDialog() {
   );
 }
 
-export default CreateBookDialog;
+export default JoinBookDialog;

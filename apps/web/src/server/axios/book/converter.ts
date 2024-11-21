@@ -1,5 +1,5 @@
-import { Book } from "@/interface/book";
-import { BookModel } from "./models";
+import { Book, CreateBookForm, JoinBookForm } from "@/interface/book";
+import { BookModel, CreateBookPayload, JoinBookPayload } from "./models";
 
 export const convertBookModelToBook = (bookModel: BookModel): Book => ({
   id: bookModel.id,
@@ -10,11 +10,15 @@ export const convertBookModelToBook = (bookModel: BookModel): Book => ({
   lastModifiedAt: bookModel.last_modified_at,
 });
 
-export const convertBookToBookModel = (book: Book): BookModel => ({
-  id: book.id,
+export const convertToCreateBookPayload = (
+  book: CreateBookForm
+): CreateBookPayload => ({
   book_name: book.name,
   book_description: book.description,
-  creator_id: book.creatorId,
-  create_at: book.createAt,
-  last_modified_at: book.lastModifiedAt,
+});
+
+export const convertToJoinBookPayload = (
+  data: JoinBookForm
+): JoinBookPayload => ({
+  book_id: data.id,
 });

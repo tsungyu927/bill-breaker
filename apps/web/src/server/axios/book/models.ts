@@ -13,9 +13,13 @@ export interface BookModel {
 export type CreateBookResponse = APIResponse<BookModel>;
 export type BookListResponse = APIResponse<BookModel[]>;
 export type BookResponse = APIResponse<BookModel>;
+export type JoinBookResponse = APIResponse<string>;
 
 // Payload
 export type CreateBookPayload = Pick<
   BookModel,
   "book_name" | "book_description"
 >;
+export type JoinBookPayload = {
+  book_id: string;
+};

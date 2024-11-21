@@ -14,3 +14,6 @@ export interface Book {
 
 // Create book form
 export type CreateBookForm = Pick<Book, "name" | "description">;
+
+// Join book form
+export type JoinBookForm = Pick<Book, "id">;
