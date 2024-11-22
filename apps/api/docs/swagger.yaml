@@ -191,6 +191,44 @@ paths:
       summary: Get book by book_id
       tags:
       - books
+  /api/v1/book/{book_id}/leave:
+    delete:
+      consumes:
+      - application/json
+      description: leave the book with book_id and user_id
+      parameters:
+      - description: User ID for authentication
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Leave the book with book_id
+        in: path
+        name: book_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "404":
+          description: not found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Leave the book
+      tags:
+      - books
   /api/v1/book/join:
     post:
       consumes:

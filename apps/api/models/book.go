@@ -137,6 +137,33 @@ func (book *BookModel) JoinBook(userID, bookID string) error {
 	return nil
 }
 
+func (book *BookModel) LeaveBook(userID, bookID string) error {
+	query := `
+		WITH removed_rows AS (
+			DELETE FROM book_members
+			WHERE book_id = $1
+			AND user_id = $2
+			AND user_id != (SELECT creator_id FROM books WHERE id = $1)
+			RETURNING *
+		)
+		SELECT COUNT(*) AS rows_removed FROM removed_rows
+	`
+
+	var rowsRemoved int
+	err := db.GetDB().QueryRow(context.Background(), query, bookID, userID).Scan(&rowsRemoved)
+
+	if err != nil {
+		return err
+	}
+
+	if rowsRemoved == 0 {
+		// Check if the user was successfully removed
+		return errors.New("Failed to leave the book! You might be the creator or not a member")
+	}
+
+	return nil
+}
+
 func addBookMember(bookID, userID string) error {
 	query := `INSERT INTO book_members (book_id, user_id) VALUES ($1, $2)`
 

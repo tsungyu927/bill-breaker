@@ -17,6 +17,10 @@ type JoinBookRequest struct {
 	BookID string `json:"book_id" validate:"required,uuid4"`
 }
 
+type LeaveBookRequest struct {
+	BookID string `uri:"book_id" validate:"required,uuid4"`
+}
+
 func ValidateCreateBook(data CreateBookRequest) error {
 	return validate.Struct(data)
 }
@@ -30,5 +34,9 @@ func ValidateGetBookByID(data GetBookByIDRequest) error {
 }
 
 func ValidateJoinBook(data JoinBookRequest) error {
+	return validate.Struct(data)
+}
+
+func ValidateLeaveBook(data LeaveBookRequest) error {
 	return validate.Struct(data)
 }

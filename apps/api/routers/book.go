@@ -10,4 +10,5 @@ func BookRegister(router *gin.RouterGroup) {
 	router.GET("/book/:book_id", controllers.GetBookByID)
 	router.POST("/book", controllers.CreateNewBook)
 	router.POST("/book/join", controllers.JoinBook)
+	router.DELETE("/book/:book_id/leave", controllers.LeaveBook)
 }

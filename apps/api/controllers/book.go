@@ -171,3 +171,38 @@ func JoinBook(c *gin.Context) {
 	response := utils.SuccessResponse("")
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary Leave the book
+// @Description leave the book with book_id and user_id
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param X-User-ID header string true "User ID for authentication"
+// @Param book_id path string true "Leave the book with book_id"
+// @Success 200 {object} utils.APIResponse{} "success"
+// @Failure 400 {object} utils.APIResponse "bad request"
+// @Failure 404 {object} utils.APIResponse "not found"
+// @Failure 500 {object} utils.APIResponse "internal server error"
+// @Router /api/v1/book/{book_id}/leave [delete]
+func LeaveBook(c *gin.Context) {
+	userID := c.Request.Header.Get("X-User-ID")
+	bookID := c.Param("book_id")
+
+	if err := validators.ValidateLeaveBook(validators.LeaveBookRequest{BookID: bookID}); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
+		return
+	}
+
+	var book models.BookModel
+	err := book.LeaveBook(userID, bookID)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, utils.ErrorResponse("Failed to leave the book"))
+		return
+	}
+
+	response := utils.SuccessResponse("")
+	c.JSON(http.StatusOK, response)
+}
