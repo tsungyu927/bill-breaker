@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tsungyu927/bill-breaker/api/models"
+	"github.com/tsungyu927/bill-breaker/api/models/user"
 	"github.com/tsungyu927/bill-breaker/api/utils"
 	"github.com/tsungyu927/bill-breaker/api/utils/responses"
 	"github.com/tsungyu927/bill-breaker/api/validators"

@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tsungyu927/bill-breaker/api/controllers"
+	"github.com/tsungyu927/bill-breaker/api/controllers/book"
 )
 
 func BookRegister(router *gin.RouterGroup) {
