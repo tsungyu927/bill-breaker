@@ -42,6 +42,11 @@ definitions:
       last_modified_at:
         type: string
     type: object
+  responses.CreateCostResponse:
+    properties:
+      id:
+        type: string
+    type: object
   responses.CreateUserResponse:
     properties:
       id:
@@ -55,6 +60,26 @@ definitions:
       status:
         type: string
     type: object
+  validators.CostPayerRequest:
+    properties:
+      amount:
+        type: number
+      user_id:
+        type: string
+    required:
+    - amount
+    - user_id
+    type: object
+  validators.CostSharerRequest:
+    properties:
+      share_amount:
+        type: number
+      user_id:
+        type: string
+    required:
+    - share_amount
+    - user_id
+    type: object
   validators.CreateBookRequest:
     properties:
       book_description:
@@ -64,6 +89,31 @@ definitions:
         type: string
     required:
     - book_name
+    type: object
+  validators.CreateCostRequest:
+    properties:
+      amount:
+        type: number
+      book_id:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      payers:
+        items:
+          $ref: '#/definitions/validators.CostPayerRequest'
+        type: array
+      sharers:
+        items:
+          $ref: '#/definitions/validators.CostSharerRequest'
+        type: array
+    required:
+    - amount
+    - book_id
+    - currency
+    - payers
+    - sharers
     type: object
   validators.CreateUserRequest:
     properties:
@@ -227,6 +277,50 @@ paths:
           schema:
             $ref: '#/definitions/utils.APIResponse'
       summary: Leave the book
+      tags:
+      - books
+  /api/v1/book/cost:
+    post:
+      consumes:
+      - application/json
+      description: create new cost with cost information
+      parameters:
+      - description: User ID for authentication
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Create new cost with cost information
+        in: body
+        name: cost
+        required: true
+        schema:
+          $ref: '#/definitions/validators.CreateCostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.CreateCostResponse'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "404":
+          description: not found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Create new cost
       tags:
       - books
   /api/v1/book/join:

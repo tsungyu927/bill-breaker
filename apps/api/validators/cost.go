@@ -1,0 +1,24 @@
+package validators
+
+type CostPayerRequest struct {
+	UserID string  `json:"user_id" validate:"required,uuid4"`
+	Amount float32 `json:"amount" validate:"required,number"`
+}
+
+type CostSharerRequest struct {
+	UserID      string  `json:"user_id" validate:"required,uuid4"`
+	ShareAmount float32 `json:"share_amount" validate:"required,number"`
+}
+
+type CreateCostRequest struct {
+	BookID      string              `json:"book_id" validate:"required,uuid4"`
+	Amount      float32             `json:"amount" validate:"required,number"`
+	Description *string             `json:"description" validate:"omitempty"`
+	Currency    string              `json:"currency" validate:"required"`
+	Payers      []CostPayerRequest  `json:"payers" validate:"required"`
+	Sharers     []CostSharerRequest `json:"sharers" validate:"required"`
+}
+
+func ValidateCreateCost(data CreateCostRequest) error {
+	return validate.Struct(data)
+}
