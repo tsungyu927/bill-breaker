@@ -35,7 +35,7 @@ pnpm run dev
 
 ## API
 
-[Swagger](localhost:8080/swagger/index.html)
+[Swagger](http://localhost:8080/swagger/index.html)
 
 ## Features
 
