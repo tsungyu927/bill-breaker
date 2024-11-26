@@ -42,7 +42,7 @@ func main() {
 	routers.UserRegister(v1)
 
 	// Swagger
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", middlewares.SwaggerAuthMiddleware(), ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Start server
 	srv := &http.Server{
