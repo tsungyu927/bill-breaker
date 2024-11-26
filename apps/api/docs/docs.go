@@ -96,7 +96,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "books"
+                    "costs"
                 ],
                 "summary": "Create new cost",
                 "parameters": [
@@ -236,15 +236,6 @@ const docTemplate = `{
                         "name": "X-User-ID",
                         "in": "header",
                         "required": true
-                    },
-                    {
-                        "description": "Get book list with user_id",
-                        "name": "book",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validators.GetBookListRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -312,13 +303,11 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
                         "description": "Get book with book_id",
-                        "name": "book",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/validators.GetBookByIDRequest"
-                        }
+                        "name": "book_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -334,6 +323,78 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.BookModel"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/book/{book_id}/cost/list": {
+            "get": {
+                "description": "get cost list by book_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "costs"
+                ],
+                "summary": "Get cost list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID for authentication",
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Book ID",
+                        "name": "book_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.APIResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.CostRecordModel"
+                                            }
                                         }
                                     }
                                 }
@@ -437,13 +498,6 @@ const docTemplate = `{
                         "description": "User ID for authentication",
                         "name": "X-User-ID",
                         "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
                         "required": true
                     }
                 ],
@@ -570,6 +624,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "last_modified_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CostRecordModel": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "book_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "creator_id": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 }
             }
@@ -738,28 +818,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "minLength": 1
-                }
-            }
-        },
-        "validators.GetBookByIDRequest": {
-            "type": "object",
-            "required": [
-                "bookID"
-            ],
-            "properties": {
-                "bookID": {
-                    "type": "string"
-                }
-            }
-        },
-        "validators.GetBookListRequest": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string"
                 }
             }
         },

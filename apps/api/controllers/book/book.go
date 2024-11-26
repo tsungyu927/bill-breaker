@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tsungyu927/bill-breaker/api/models/book"
+	models "github.com/tsungyu927/bill-breaker/api/models/book"
 	"github.com/tsungyu927/bill-breaker/api/utils"
 	"github.com/tsungyu927/bill-breaker/api/utils/responses"
 	"github.com/tsungyu927/bill-breaker/api/validators"
@@ -69,7 +69,6 @@ func CreateNewBook(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param X-User-ID header string true "User ID for authentication"
-// @Param book body validators.GetBookListRequest true "Get book list with user_id"
 // @Success 200 {object} utils.APIResponse{data=[]models.BookModel} "success"
 // @Failure 400 {object} utils.APIResponse "bad request"
 // @Failure 404 {object} utils.APIResponse "not found"
@@ -102,7 +101,7 @@ func GetAllBooks(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param X-User-ID header string true "User ID for authentication"
-// @Param book body validators.GetBookByIDRequest true "Get book with book_id"
+// @Param book_id path string true "Get book with book_id"
 // @Success 200 {object} utils.APIResponse{data=models.BookModel} "success"
 // @Failure 400 {object} utils.APIResponse "bad request"
 // @Failure 404 {object} utils.APIResponse "not found"

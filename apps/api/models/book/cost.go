@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -73,6 +74,54 @@ func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sh
 	}
 
 	return tx.Commit(context.Background())
+}
+
+func GetCostListByBookID(bookID, userID string) ([]CostRecordModel, error) {
+	costs := []CostRecordModel{}
+
+	// Check whether the user is the member of the book
+	isMember, err := isBookMember(bookID, userID)
+
+	if isMember == false || err != nil {
+		return nil, errors.New("User is not a member of the book")
+	}
+
+	// Fetch costs associated with the bookID
+	query := `
+		SELECT id, book_id, amount, description, creator_id, currency, created_at
+		FROM cost_records
+		WHERE book_id = $1
+		ORDER BY created_at DESC
+	`
+
+	rows, err := db.GetDB().Query(context.Background(), query, bookID)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var cost CostRecordModel
+
+		err := rows.Scan(
+			&cost.ID,
+			&cost.BookID,
+			&cost.Amount,
+			&cost.Description,
+			&cost.CreatorID,
+			&cost.Currency,
+			&cost.CreatedAt,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		costs = append(costs, cost)
+	}
+
+	return costs, nil
 }
 
 func insertPayers(tx pgx.Tx, costID string, payers []validators.CostPayerRequest) error {

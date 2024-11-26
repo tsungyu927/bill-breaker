@@ -19,6 +19,14 @@ type CreateCostRequest struct {
 	Sharers     []CostSharerRequest `json:"sharers" validate:"required"`
 }
 
+type GetCostListRequest struct {
+	BookID string `uri:"book_id" validate:"required,uuid4"`
+}
+
 func ValidateCreateCost(data CreateCostRequest) error {
+	return validate.Struct(data)
+}
+
+func ValidateGetCostList(data GetCostListRequest) error {
 	return validate.Struct(data)
 }
