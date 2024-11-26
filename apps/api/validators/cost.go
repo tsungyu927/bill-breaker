@@ -23,10 +23,19 @@ type GetCostListRequest struct {
 	BookID string `uri:"book_id" validate:"required,uuid4"`
 }
 
+type GetCostDetailRequest struct {
+	BookID string `uri:"book_id" validate:"required,uuid4"`
+	CostID string `uri:"cost_id" validate:"required,uuid4"`
+}
+
 func ValidateCreateCost(data CreateCostRequest) error {
 	return validate.Struct(data)
 }
 
 func ValidateGetCostList(data GetCostListRequest) error {
+	return validate.Struct(data)
+}
+
+func ValidateGetCostDetail(data GetCostDetailRequest) error {
 	return validate.Struct(data)
 }

@@ -104,3 +104,45 @@ func GetCostList(c *gin.Context) {
 	response := utils.SuccessResponse(costs)
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary Get cost detail
+// @Description get cost detail by book_id and cost_id
+// @Tags costs
+// @Accept json
+// @Produce json
+// @Param X-User-ID header string true "User ID for authentication"
+// @Param book_id path string true "Book ID"
+// @Param cost_id path string true "Cost ID"
+// @Success 200 {object} utils.APIResponse{data=models.CostDetail} "success"
+// @Failure 400 {object} utils.APIResponse "bad request"
+// @Failure 404 {object} utils.APIResponse "not found"
+// @Failure 500 {object} utils.APIResponse "internal server error"
+// @Router /api/v1/book/{book_id}/cost/{cost_id} [get]
+func GetCostDetail(c *gin.Context) {
+	userID := c.Request.Header.Get("X-User-ID")
+	bookID := c.Param("book_id")
+	costID := c.Param("cost_id")
+
+	if userID == "" {
+		log.Println("Missing User ID in header")
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse("Missing User ID"))
+		return
+	}
+
+	if err := validators.ValidateGetCostDetail(validators.GetCostDetailRequest{BookID: bookID, CostID: costID}); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
+		return
+	}
+
+	costDetail, err := models.GetCostDetail(bookID, costID, userID)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, utils.ErrorResponse(err.Error()))
+		return
+	}
+
+	response := utils.SuccessResponse(costDetail)
+	c.JSON(http.StatusOK, response)
+}

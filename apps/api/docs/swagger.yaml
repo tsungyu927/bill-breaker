@@ -14,6 +14,40 @@ definitions:
       last_modified_at:
         type: string
     type: object
+  models.CostDetail:
+    properties:
+      amount:
+        type: number
+      book_id:
+        type: string
+      created_at:
+        type: string
+      creator_id:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      payers:
+        items:
+          $ref: '#/definitions/models.CostPayerModel'
+        type: array
+      sharers:
+        items:
+          $ref: '#/definitions/models.CostSharerModel'
+        type: array
+    type: object
+  models.CostPayerModel:
+    properties:
+      amount:
+        type: number
+      cost_id:
+        type: string
+      user_id:
+        type: string
+    type: object
   models.CostRecordModel:
     properties:
       amount:
@@ -29,6 +63,15 @@ definitions:
       description:
         type: string
       id:
+        type: string
+    type: object
+  models.CostSharerModel:
+    properties:
+      cost_id:
+        type: string
+      share_amount:
+        type: number
+      user_id:
         type: string
     type: object
   models.User:
@@ -243,6 +286,54 @@ paths:
       summary: Get book by book_id
       tags:
       - books
+  /api/v1/book/{book_id}/cost/{cost_id}:
+    get:
+      consumes:
+      - application/json
+      description: get cost detail by book_id and cost_id
+      parameters:
+      - description: User ID for authentication
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Book ID
+        in: path
+        name: book_id
+        required: true
+        type: string
+      - description: Cost ID
+        in: path
+        name: cost_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.CostDetail'
+              type: object
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "404":
+          description: not found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Get cost detail
+      tags:
+      - costs
   /api/v1/book/{book_id}/cost/list:
     get:
       consumes:

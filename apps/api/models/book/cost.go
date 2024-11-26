@@ -32,6 +32,12 @@ type CostSharerModel struct {
 	ShareAmount float32 `json:"share_amount"`
 }
 
+type CostDetail struct {
+	CostRecordModel
+	Payers  []CostPayerModel  `json:"payers"`
+	Sharers []CostSharerModel `json:"sharers"`
+}
+
 func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sharers []validators.CostSharerRequest) error {
 	// Use Transactions(Begin) to ensure that a group of operations either all succeed or all fail.
 	tx, err := db.GetDB().Begin(context.Background())
@@ -122,6 +128,100 @@ func GetCostListByBookID(bookID, userID string) ([]CostRecordModel, error) {
 	}
 
 	return costs, nil
+}
+
+func GetCostDetail(bookID, costID, userID string) (*CostDetail, error) {
+	// Check whether the user is the member of the book
+	isMember, err := isBookMember(bookID, userID)
+
+	if isMember == false || err != nil {
+		return nil, errors.New("User is not a member of the book")
+	}
+
+	query := `
+		SELECT
+			c.id AS cost_id,
+			c.book_id,
+			c.amount,
+			c.description,
+			c.creator_id,
+			c.currency,
+			c.created_at,
+			cp.user_id AS payer_id,
+			cp.amount AS payer_amount,
+			cs.user_id AS sharer_id,
+			cs.share_amount AS sharer_amount
+		FROM cost_records c
+		LEFT JOIN cost_payers cp ON c.id = cp.cost_id
+		LEFT JOIN cost_sharers cs ON c.id = cs.cost_id
+		WHERE c.id = $1 AND c.book_id = $2
+	`
+
+	rows, err := db.GetDB().Query(context.Background(), query, costID, bookID)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Parse result into GetCostDetailResponse
+	cost := &CostDetail{}
+	cost.Payers = []CostPayerModel{}
+	cost.Sharers = []CostSharerModel{}
+
+	seenPayers := make(map[string]bool)
+	seenSharers := make(map[string]bool)
+
+	for rows.Next() {
+		var (
+			payerUserID, sharerUserID *string
+			payerAmount, sharerAmount *float32
+		)
+
+		err := rows.Scan(
+			&cost.ID,
+			&cost.BookID,
+			&cost.Amount,
+			&cost.Description,
+			&cost.CreatorID,
+			&cost.Currency,
+			&cost.CreatedAt,
+			&payerUserID,
+			&payerAmount,
+			&sharerUserID,
+			&sharerAmount,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if payerUserID != nil && !seenPayers[*payerUserID] {
+			// Add unique payer
+			cost.Payers = append(cost.Payers, CostPayerModel{
+				CostID: cost.ID,
+				UserID: *payerUserID,
+				Amount: *payerAmount,
+			})
+			seenPayers[*payerUserID] = true
+		}
+
+		if sharerUserID != nil && !seenSharers[*sharerUserID] {
+			// Add unique sharer
+			cost.Sharers = append(cost.Sharers, CostSharerModel{
+				CostID:      cost.ID,
+				UserID:      *sharerUserID,
+				ShareAmount: *sharerAmount,
+			})
+			seenSharers[*sharerUserID] = true
+		}
+	}
+
+	if cost.ID == "" {
+		return nil, errors.New("Cost not found")
+	}
+
+	return cost, nil
 }
 
 func insertPayers(tx pgx.Tx, costID string, payers []validators.CostPayerRequest) error {
