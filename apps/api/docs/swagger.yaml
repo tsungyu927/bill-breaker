@@ -1,4 +1,30 @@
 definitions:
+  models.BookDetail:
+    properties:
+      book_description:
+        type: string
+      book_name:
+        type: string
+      create_at:
+        type: string
+      creator_id:
+        type: string
+      id:
+        type: string
+      last_modified_at:
+        type: string
+      members:
+        items:
+          $ref: '#/definitions/models.BookMember'
+        type: array
+    type: object
+  models.BookMember:
+    properties:
+      user_id:
+        type: string
+      user_name:
+        type: string
+    type: object
   models.BookModel:
     properties:
       book_description:
@@ -269,7 +295,7 @@ paths:
             - $ref: '#/definitions/utils.APIResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/models.BookModel'
+                  $ref: '#/definitions/models.BookDetail'
               type: object
         "400":
           description: bad request

@@ -102,7 +102,7 @@ func GetAllBooks(c *gin.Context) {
 // @Produce json
 // @Param X-User-ID header string true "User ID for authentication"
 // @Param book_id path string true "Get book with book_id"
-// @Success 200 {object} utils.APIResponse{data=models.BookModel} "success"
+// @Success 200 {object} utils.APIResponse{data=models.BookDetail} "success"
 // @Failure 400 {object} utils.APIResponse "bad request"
 // @Failure 404 {object} utils.APIResponse "not found"
 // @Failure 500 {object} utils.APIResponse "internal server error"

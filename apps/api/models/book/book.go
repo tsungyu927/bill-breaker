@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -21,6 +22,16 @@ type BookMemberModel struct {
 	BookID   string    `json:"book_id"`
 	UserID   string    `json:"user_id"`
 	JoinedAt time.Time `json:"joined_at"`
+}
+
+type BookMember struct {
+	UserID   string `json:"user_id"`
+	UserName string `json:"user_name"`
+}
+
+type BookDetail struct {
+	BookModel
+	Members []BookMember `json:"members"`
 }
 
 func (book *BookModel) Create() error {
@@ -95,7 +106,7 @@ func (book *BookModel) GetBookList(userID string) ([]BookModel, error) {
 	return books, nil
 }
 
-func (book *BookModel) GetBookByID(userID, bookID string) (*BookModel, error) {
+func (book *BookModel) GetBookByID(userID, bookID string) (*BookDetail, error) {
 	query := `
 		SELECT
 			b.id,
@@ -103,14 +114,25 @@ func (book *BookModel) GetBookByID(userID, bookID string) (*BookModel, error) {
 			b.book_name,
 			b.book_description,
 			b.created_at,
-			b.last_modified_at
+			b.last_modified_at,
+			COALESCE(json_agg(json_build_object(
+				'user_id', bm.user_id,
+				'user_name', u.name
+			)) FILTER (WHERE bm.user_id IS NOT NULL), '[]') AS members
 		FROM books b
 		INNER JOIN book_members bm ON b.id = bm.book_id
-		WHERE bm.user_id = $1 AND b.id = $2
+		INNER JOIN users u ON bm.user_id = u.id
+		WHERE b.id = $1
+		AND EXISTS( 
+			SELECT 1 FROM book_members
+			WHERE book_id = b.id AND user_id = $2
+		)		
+		GROUP BY b.id
 	`
 
-	row := db.GetDB().QueryRow(context.Background(), query, userID, bookID)
-	var result BookModel
+	row := db.GetDB().QueryRow(context.Background(), query, bookID, userID)
+	var result BookDetail
+	var membersJSON []byte
 
 	err := row.Scan(
 		&result.ID,
@@ -119,13 +141,19 @@ func (book *BookModel) GetBookByID(userID, bookID string) (*BookModel, error) {
 		&result.BookDescription,
 		&result.CreatedAt,
 		&result.LastModifiedAt,
+		&membersJSON,
 	)
 	if err != nil {
 		return nil, errors.New("Failed to get book by User ID and Book ID: " + err.Error())
 	}
+	
+	// Parse JSON into Members slice
+	err = json.Unmarshal(membersJSON, &result.Members)
+	if err != nil {
+		return nil, errors.New("Failed to parse members: " + err.Error())
+	}
 
 	return &result, nil
-
 }
 
 func (book *BookModel) JoinBook(userID, bookID string) error {
