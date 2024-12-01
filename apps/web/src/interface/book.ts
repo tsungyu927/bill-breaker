@@ -3,6 +3,11 @@ export enum RegisterAction {
   Restore = "restore",
 }
 
+export interface BookMember {
+  userId: string;
+  userName: string;
+}
+
 export interface Book {
   id: string;
   name: string;
@@ -10,6 +15,10 @@ export interface Book {
   creatorId: string;
   createAt: string;
   lastModifiedAt: string;
+}
+
+export interface BookDetail extends Book {
+  members: BookMember[];
 }
 
 // Create book form

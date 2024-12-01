@@ -10,9 +10,16 @@ export interface BookModel {
 }
 
 // Response
+export interface BookDetailModel extends BookModel {
+  members: {
+    user_id: string;
+    user_name: string;
+  }[];
+}
+
 export type CreateBookResponse = APIResponse<BookModel>;
 export type BookListResponse = APIResponse<BookModel[]>;
-export type BookResponse = APIResponse<BookModel>;
+export type BookResponse = APIResponse<BookDetailModel>;
 export type JoinBookResponse = APIResponse<string>;
 
 // Payload

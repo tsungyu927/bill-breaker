@@ -1,5 +1,8 @@
 import axiosInstance from "..";
-import { convertBookModelToBook } from "./converter";
+import {
+  convertBookDetailModelToBookDetail,
+  convertBookModelToBook,
+} from "./converter";
 import {
   BookListResponse,
   BookResponse,
@@ -35,7 +38,7 @@ export const fetchBookByBookId = async (bookId: string) => {
   );
 
   if (data.data) {
-    return convertBookModelToBook(data.data);
+    return convertBookDetailModelToBookDetail(data.data);
   }
   return null;
 };

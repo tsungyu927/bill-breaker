@@ -1,5 +1,15 @@
-import { Book, CreateBookForm, JoinBookForm } from "@/interface/book";
-import { BookModel, CreateBookPayload, JoinBookPayload } from "./models";
+import {
+  Book,
+  BookDetail,
+  CreateBookForm,
+  JoinBookForm,
+} from "@/interface/book";
+import {
+  BookDetailModel,
+  BookModel,
+  CreateBookPayload,
+  JoinBookPayload,
+} from "./models";
 
 export const convertBookModelToBook = (bookModel: BookModel): Book => ({
   id: bookModel.id,
@@ -8,6 +18,21 @@ export const convertBookModelToBook = (bookModel: BookModel): Book => ({
   creatorId: bookModel.creator_id,
   createAt: bookModel.create_at,
   lastModifiedAt: bookModel.last_modified_at,
+});
+
+export const convertBookDetailModelToBookDetail = (
+  bookDetailModel: BookDetailModel
+): BookDetail => ({
+  id: bookDetailModel.id,
+  name: bookDetailModel.book_name,
+  description: bookDetailModel.book_description,
+  members: bookDetailModel.members.map((item) => ({
+    userId: item.user_id,
+    userName: item.user_name,
+  })),
+  creatorId: bookDetailModel.creator_id,
+  createAt: bookDetailModel.create_at,
+  lastModifiedAt: bookDetailModel.last_modified_at,
 });
 
 export const convertToCreateBookPayload = (
