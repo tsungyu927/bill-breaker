@@ -13,12 +13,23 @@ export interface Book {
   name: string;
   description?: string;
   creatorId: string;
-  createAt: string;
+  createdAt: string;
   lastModifiedAt: string;
+}
+
+export interface Cost {
+  id: string;
+  bookId: string;
+  amount: number;
+  currency: string;
+  creatorId: string;
+  createdAt: string;
+  description?: string;
 }
 
 export interface BookDetail extends Book {
   members: BookMember[];
+  costs: Cost[];
 }
 
 // Create book form
