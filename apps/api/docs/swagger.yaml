@@ -1,23 +1,4 @@
 definitions:
-  models.BookDetail:
-    properties:
-      book_description:
-        type: string
-      book_name:
-        type: string
-      create_at:
-        type: string
-      creator_id:
-        type: string
-      id:
-        type: string
-      last_modified_at:
-        type: string
-      members:
-        items:
-          $ref: '#/definitions/models.BookMember'
-        type: array
-    type: object
   models.BookMember:
     properties:
       user_id:
@@ -112,6 +93,29 @@ definitions:
         type: string
       name:
         type: string
+    type: object
+  responses.CombinedBookDetail:
+    properties:
+      book_description:
+        type: string
+      book_name:
+        type: string
+      costs:
+        items:
+          $ref: '#/definitions/models.CostRecordModel'
+        type: array
+      create_at:
+        type: string
+      creator_id:
+        type: string
+      id:
+        type: string
+      last_modified_at:
+        type: string
+      members:
+        items:
+          $ref: '#/definitions/models.BookMember'
+        type: array
     type: object
   responses.CreateBookResponse:
     properties:
@@ -295,7 +299,7 @@ paths:
             - $ref: '#/definitions/utils.APIResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/models.BookDetail'
+                  $ref: '#/definitions/responses.CombinedBookDetail'
               type: object
         "400":
           description: bad request
@@ -358,51 +362,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.APIResponse'
       summary: Get cost detail
-      tags:
-      - costs
-  /api/v1/book/{book_id}/cost/list:
-    get:
-      consumes:
-      - application/json
-      description: get cost list by book_id
-      parameters:
-      - description: User ID for authentication
-        in: header
-        name: X-User-ID
-        required: true
-        type: string
-      - description: Book ID
-        in: path
-        name: book_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.APIResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/models.CostRecordModel'
-                  type: array
-              type: object
-        "400":
-          description: bad request
-          schema:
-            $ref: '#/definitions/utils.APIResponse'
-        "404":
-          description: not found
-          schema:
-            $ref: '#/definitions/utils.APIResponse'
-        "500":
-          description: internal server error
-          schema:
-            $ref: '#/definitions/utils.APIResponse'
-      summary: Get cost list
       tags:
       - costs
   /api/v1/book/{book_id}/leave:

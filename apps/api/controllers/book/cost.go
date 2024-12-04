@@ -65,18 +65,6 @@ func CreateNewCost(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary Get cost list
-// @Description get cost list by book_id
-// @Tags costs
-// @Accept json
-// @Produce json
-// @Param X-User-ID header string true "User ID for authentication"
-// @Param book_id path string true "Book ID"
-// @Success 200 {object} utils.APIResponse{data=[]models.CostRecordModel} "success"
-// @Failure 400 {object} utils.APIResponse "bad request"
-// @Failure 404 {object} utils.APIResponse "not found"
-// @Failure 500 {object} utils.APIResponse "internal server error"
-// @Router /api/v1/book/{book_id}/cost/list [get]
 func GetCostList(c *gin.Context) {
 	userID := c.Request.Header.Get("X-User-ID")
 	bookID := c.Param("book_id")

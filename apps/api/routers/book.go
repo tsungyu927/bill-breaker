@@ -15,6 +15,5 @@ func BookRegister(router *gin.RouterGroup) {
 
 	// cost
 	router.POST("/book/cost", controllers.CreateNewCost)
-	router.GET("/book/:book_id/cost/list", controllers.GetCostList)
 	router.GET("/book/:book_id/cost/:cost_id", controllers.GetCostDetail)
 }

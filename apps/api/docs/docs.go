@@ -322,79 +322,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.BookDetail"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "bad request",
-                        "schema": {
-                            "$ref": "#/definitions/utils.APIResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "schema": {
-                            "$ref": "#/definitions/utils.APIResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.APIResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/book/{book_id}/cost/list": {
-            "get": {
-                "description": "get cost list by book_id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "costs"
-                ],
-                "summary": "Get cost list",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID for authentication",
-                        "name": "X-User-ID",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Book ID",
-                        "name": "book_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.APIResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.CostRecordModel"
-                                            }
+                                            "$ref": "#/definitions/responses.CombinedBookDetail"
                                         }
                                     }
                                 }
@@ -681,35 +609,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.BookDetail": {
-            "type": "object",
-            "properties": {
-                "book_description": {
-                    "type": "string"
-                },
-                "book_name": {
-                    "type": "string"
-                },
-                "create_at": {
-                    "type": "string"
-                },
-                "creator_id": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "last_modified_at": {
-                    "type": "string"
-                },
-                "members": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.BookMember"
-                    }
-                }
-            }
-        },
         "models.BookMember": {
             "type": "object",
             "properties": {
@@ -853,6 +752,41 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.CombinedBookDetail": {
+            "type": "object",
+            "properties": {
+                "book_description": {
+                    "type": "string"
+                },
+                "book_name": {
+                    "type": "string"
+                },
+                "costs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.CostRecordModel"
+                    }
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "creator_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_modified_at": {
+                    "type": "string"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.BookMember"
+                    }
                 }
             }
         },

@@ -146,7 +146,7 @@ func (book *BookModel) GetBookByID(userID, bookID string) (*BookDetail, error) {
 	if err != nil {
 		return nil, errors.New("Failed to get book by User ID and Book ID: " + err.Error())
 	}
-	
+
 	// Parse JSON into Members slice
 	err = json.Unmarshal(membersJSON, &result.Members)
 	if err != nil {
