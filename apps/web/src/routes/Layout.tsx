@@ -33,10 +33,12 @@ function Layout() {
 
   return (
     <ThemeProvider>
-      <Outlet />
-      <RegisterDialog open={!userId} onSubmit={handleRegisterSubmit} />
-      <Settings />
-      <Toaster />
+      <div className="w-dvw h-dvh">
+        <Outlet />
+        <RegisterDialog open={!userId} onSubmit={handleRegisterSubmit} />
+        <Settings />
+        <Toaster />
+      </div>
     </ThemeProvider>
   );
 }

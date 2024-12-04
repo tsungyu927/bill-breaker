@@ -1,3 +1,4 @@
+import BookDetailCard from "@/modules/book/BookDetailCard";
 import { fetchBookByBookId } from "@/server/axios/book";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -15,7 +16,11 @@ function BookDetail() {
     initialData: null,
   });
 
-  return <div>detail: {JSON.stringify(data)}</div>;
+  return (
+    <div className="w-full h-full flex flex-col p-4">
+      {data && <BookDetailCard {...data} />}
+    </div>
+  );
 }
 
 export default BookDetail;

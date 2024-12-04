@@ -8,6 +8,7 @@ import ErrorPage from "@/routes/Error";
 import BookDetail from "./routes/book/BookDetail";
 import Layout from "./routes/Layout";
 import { useUser } from "./contexts/UserContext";
+import CostDetail from "./routes/book/CostDetail";
 
 export default function App() {
   const { userId } = useUser();
@@ -33,6 +34,11 @@ export default function App() {
         {
           path: "/book/:bookId",
           element: <BookDetail />,
+          loader: authLoader,
+        },
+        {
+          path: "/book/:bookId/cost/:costId",
+          element: <CostDetail />,
           loader: authLoader,
         },
         {

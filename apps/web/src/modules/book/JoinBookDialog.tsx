@@ -6,6 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTrigger,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -18,7 +19,6 @@ import { Input } from "@/components/ui/input";
 import { JoinBookForm } from "@/interface/book";
 import { joinBook } from "@/server/axios/book";
 import { convertToJoinBookPayload } from "@/server/axios/book/converter";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

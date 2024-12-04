@@ -17,9 +17,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { RegisterAction } from "@/interface/book";
-import { TabsContent } from "@radix-ui/react-tabs";
 import { useState } from "react";
 
 interface Props {
