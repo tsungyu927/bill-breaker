@@ -14,10 +14,11 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { type BookDetail } from "@/interface/book";
+import Loading from "@/modules/Loading";
 
 function BookDetail() {
   const { bookId } = useParams();
-  const { data } = useQuery({
+  const { isFetching, data } = useQuery({
     queryKey: ["bookDetail", bookId],
     queryFn: () => {
       if (bookId) {
@@ -47,6 +48,9 @@ function BookDetail() {
     return acc;
   }, [] as BookDetail["members"]);
 
+  if (isFetching) {
+    return <Loading />;
+  }
   return (
     <div className="w-full h-full flex flex-col p-4 gap-4">
       <Card className="w-full break-words">
