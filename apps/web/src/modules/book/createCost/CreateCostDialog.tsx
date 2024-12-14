@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,6 +30,8 @@ import { convertToCreateCostPayload } from "@/server/axios/book/converter";
 import { FormProvider, useForm } from "react-hook-form";
 import MemberSelectList from "./MemberSelectList";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createCost } from "@/server/axios/book";
 
 interface Props {
   bookId: string;
@@ -37,6 +40,19 @@ interface Props {
 
 function CreateCostDialog(props: Props) {
   const { bookId, members } = props;
+  const [open, setOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: createCost,
+    onSuccess: () => {
+      setOpen(false);
+      // Re-fetch the book list
+      queryClient.invalidateQueries({
+        queryKey: ["bookDetail", bookId],
+      });
+    },
+  });
 
   const DEFAULT_FORM_VALUES: CreateCostForm = {
     bookId,
@@ -53,11 +69,11 @@ function CreateCostDialog(props: Props) {
 
   const handleCreateCost = (data: CreateCostForm) => {
     const payload = convertToCreateCostPayload(data);
-    console.log({ data, payload });
+    mutate(payload);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Create new cost</Button>
       </DialogTrigger>

@@ -8,6 +8,8 @@ import {
   BookResponse,
   CreateBookPayload,
   CreateBookResponse,
+  CreateCostPayload,
+  CreateCostResponse,
   JoinBookPayload,
   JoinBookResponse,
 } from "./models";
@@ -45,4 +47,14 @@ export const fetchBookByBookId = async (bookId: string) => {
 
 export const joinBook = async (payload: JoinBookPayload) => {
   return axiosInstance.post<JoinBookResponse>(`api/v1/book/join`, payload);
+};
+
+// Cost
+export const createCost = async (payload: CreateCostPayload) => {
+  const { data } = await axiosInstance.post<CreateCostResponse>(
+    `api/v1/book/cost`,
+    payload
+  );
+
+  return data.data;
 };

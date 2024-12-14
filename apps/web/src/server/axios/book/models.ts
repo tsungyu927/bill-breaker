@@ -50,6 +50,7 @@ export type CreateBookResponse = APIResponse<BookModel>;
 export type BookListResponse = APIResponse<BookModel[]>;
 export type BookResponse = APIResponse<BookDetailModel>;
 export type JoinBookResponse = APIResponse<string>;
+export type CreateCostResponse = APIResponse<{ id: string }>;
 
 // Payload
 export type CreateBookPayload = Pick<
