@@ -27,17 +27,21 @@ export interface BookDetailModel extends BookModel {
   costs: CostModel[];
 }
 
+export interface PayerModel {
+  cost_id: string;
+  user_id: string;
+  amount: number;
+}
+
+export interface SharerModel {
+  cost_id: string;
+  user_id: string;
+  share_amount: number;
+}
+
 export interface CostDetailModel extends CostModel {
-  payers: {
-    cost_id: string;
-    user_id: string;
-    amount: number;
-  }[];
-  sharers: {
-    cost_id: string;
-    user_id: string;
-    share_amount: number;
-  }[];
+  payers: PayerModel[];
+  sharers: SharerModel[];
 }
 
 // Response
@@ -55,3 +59,8 @@ export type CreateBookPayload = Pick<
 export type JoinBookPayload = {
   book_id: string;
 };
+export interface CreateCostPayload
+  extends Omit<CostModel, "id" | "creator_id" | "created_at"> {
+  payers: Omit<PayerModel, "cost_id">[];
+  sharers: Omit<SharerModel, "cost_id">[];
+}

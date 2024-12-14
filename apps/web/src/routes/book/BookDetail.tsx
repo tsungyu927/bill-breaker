@@ -15,6 +15,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { type BookDetail } from "@/interface/book";
 import Loading from "@/modules/Loading";
+import CreateCostDialog from "@/modules/book/createCost";
 
 function BookDetail() {
   const { bookId } = useParams();
@@ -48,7 +49,7 @@ function BookDetail() {
     return acc;
   }, [] as BookDetail["members"]);
 
-  if (isFetching) {
+  if (isFetching || !bookId) {
     return <Loading />;
   }
   return (
@@ -105,6 +106,7 @@ function BookDetail() {
           );
         })}
       </ScrollArea>
+      <CreateCostDialog bookId={bookId} members={members} />
     </div>
   );
 }

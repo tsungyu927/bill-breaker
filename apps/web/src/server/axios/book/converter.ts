@@ -3,12 +3,14 @@ import {
   BookDetail,
   Cost,
   CreateBookForm,
+  CreateCostForm,
   JoinBookForm,
 } from "@/interface/book";
 import {
   BookDetailModel,
   BookModel,
   CreateBookPayload,
+  CreateCostPayload,
   JoinBookPayload,
 } from "./models";
 
@@ -60,4 +62,21 @@ export const convertToJoinBookPayload = (
   data: JoinBookForm
 ): JoinBookPayload => ({
   book_id: data.id,
+});
+
+export const convertToCreateCostPayload = (
+  cost: CreateCostForm
+): CreateCostPayload => ({
+  book_id: cost.bookId,
+  amount: cost.amount,
+  currency: cost.currency,
+  description: cost.description,
+  payers: cost.payers.map((item) => ({
+    user_id: item.userId,
+    amount: item.amount,
+  })),
+  sharers: cost.sharers.map((item) => ({
+    user_id: item.userId,
+    share_amount: item.amount,
+  })),
 });

@@ -1,6 +1,6 @@
-import BookCard from "@/modules/book/BookCard";
-import CreateBookDialog from "@/modules/book/CreateBookDialog";
-import JoinBookDialog from "@/modules/book/JoinBookDialog";
+import BookCard from "@/modules/book/bookCard";
+import CreateBookDialog from "@/modules/book/createBook";
+import JoinBookDialog from "@/modules/book/joinBook";
 import { fetchBookList } from "@/server/axios/book";
 import { useQuery } from "@tanstack/react-query";
 

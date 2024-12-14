@@ -32,8 +32,20 @@ export interface BookDetail extends Book {
   costs: Cost[];
 }
 
+export interface CostMember {
+  userId: string;
+  amount: number;
+}
+
 // Create book form
 export type CreateBookForm = Pick<Book, "name" | "description">;
 
 // Join book form
 export type JoinBookForm = Pick<Book, "id">;
+
+// Create cost form
+export interface CreateCostForm
+  extends Omit<Cost, "id" | "creatorId" | "createdAt"> {
+  payers: CostMember[];
+  sharers: CostMember[];
+}
