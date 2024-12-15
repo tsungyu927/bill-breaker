@@ -12,10 +12,11 @@ import { fetchBookByBookId } from "@/server/axios/book";
 import { PersonIcon, StarFilledIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { type BookDetail } from "@/interface/book";
 import Loading from "@/modules/Loading";
 import CreateCostDialog from "@/modules/book/createCost";
+import { CostCard } from "@/modules/book/card";
 
 function BookDetail() {
   const { bookId } = useParams();
@@ -88,18 +89,7 @@ function BookDetail() {
                 className="w-full h-full p-6 flex flex-col gap-2"
                 asChild
               >
-                <Link to={`/book/${bookId}/cost/${cost.id}`}>
-                  <div className="w-full flex justify-between items-center">
-                    <p>
-                      $<span className="font-bold">{cost.amount}</span>{" "}
-                      {cost.currency}
-                    </p>
-                    <p>{creator?.userName}</p>
-                  </div>
-                  <div className="w-full text-sm text-muted-foreground whitespace-pre-wrap">
-                    {cost.description && <p>{cost.description}</p>}
-                  </div>
-                </Link>
+                <CostCard {...cost} creator={creator} />
               </Button>
               <Separator />
             </React.Fragment>

@@ -12,6 +12,7 @@ export interface BookModel {
 export interface CostModel {
   id: string;
   book_id: string;
+  title: string;
   amount: number;
   currency: string;
   created_at: string;

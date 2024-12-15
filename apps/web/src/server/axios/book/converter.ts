@@ -29,6 +29,7 @@ export const convertBookDetailModelToBookDetail = (
   const costs = bookDetailModel.costs.map<Cost>((cost) => ({
     id: cost.id,
     bookId: cost.book_id,
+    title: cost.title,
     amount: cost.amount,
     currency: cost.currency,
     creatorId: cost.creator_id,
@@ -68,6 +69,7 @@ export const convertToCreateCostPayload = (
   cost: CreateCostForm
 ): CreateCostPayload => ({
   book_id: cost.bookId,
+  title: cost.title,
   amount: cost.amount,
   currency: cost.currency,
   description: cost.description,

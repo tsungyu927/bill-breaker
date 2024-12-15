@@ -27,7 +27,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { BookMember, CreateCostForm } from "@/interface/book";
 import { convertToCreateCostPayload } from "@/server/axios/book/converter";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import MemberSelectList from "./MemberSelectList";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -56,6 +56,7 @@ function CreateCostDialog(props: Props) {
 
   const DEFAULT_FORM_VALUES: CreateCostForm = {
     bookId,
+    title: "",
     amount: 0,
     currency: "TWD",
     payers: members.map((member) => ({ userId: member.userId, amount: 0 })),
@@ -67,7 +68,9 @@ function CreateCostDialog(props: Props) {
     delayError: 500,
   });
 
-  const handleCreateCost = (data: CreateCostForm) => {
+  const handleCreateCost: SubmitHandler<CreateCostForm> = (
+    data: CreateCostForm
+  ) => {
     const payload = convertToCreateCostPayload(data);
     mutate(payload);
   };
@@ -92,6 +95,18 @@ function CreateCostDialog(props: Props) {
               </DialogHeader>
               <ScrollArea className="flex-grow overflow-y-auto p-0">
                 <div className="flex flex-col gap-4">
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel required>Title</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   <div className="w-full flex gap-4">
                     <FormField
                       control={form.control}

@@ -1,4 +1,4 @@
-import BookCard from "@/modules/book/bookCard";
+import { BookCard } from "@/modules/book/card";
 import CreateBookDialog from "@/modules/book/createBook";
 import JoinBookDialog from "@/modules/book/joinBook";
 import { fetchBookList } from "@/server/axios/book";

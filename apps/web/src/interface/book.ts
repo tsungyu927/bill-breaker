@@ -20,6 +20,7 @@ export interface Book {
 export interface Cost {
   id: string;
   bookId: string;
+  title: string;
   amount: number;
   currency: string;
   creatorId: string;
