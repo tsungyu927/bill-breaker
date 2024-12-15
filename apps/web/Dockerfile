@@ -2,6 +2,10 @@ FROM node:18 AS build_stage
 
 WORKDIR /app
 
+# Env for app build
+ARG VITE_API_HOST
+ENV VITE_API_HOST=$VITE_API_HOST
+
 # Install pnpm
 RUN npm install -g pnpm
 
