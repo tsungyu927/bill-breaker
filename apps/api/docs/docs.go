@@ -678,6 +678,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.CostSharerModel"
                     }
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
@@ -717,6 +720,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -893,7 +899,8 @@ const docTemplate = `{
                 "book_id",
                 "currency",
                 "payers",
-                "sharers"
+                "sharers",
+                "title"
             ],
             "properties": {
                 "amount": {
@@ -919,6 +926,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/validators.CostSharerRequest"
                     }
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },

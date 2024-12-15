@@ -12,6 +12,7 @@ type CostSharerRequest struct {
 
 type CreateCostRequest struct {
 	BookID      string              `json:"book_id" validate:"required,uuid4"`
+	Title       string              `json:"title" validate:"required"`
 	Amount      float32             `json:"amount" validate:"required,number"`
 	Description *string             `json:"description" validate:"omitempty"`
 	Currency    string              `json:"currency" validate:"required"`

@@ -47,6 +47,7 @@ func CreateNewCost(c *gin.Context) {
 
 	cost := models.CostRecordModel{
 		BookID:      req.BookID,
+		Title:       req.Title,
 		Amount:      req.Amount,
 		Description: req.Description,
 		CreatorID:   creatorID,

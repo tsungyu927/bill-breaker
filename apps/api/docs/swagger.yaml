@@ -45,6 +45,8 @@ definitions:
         items:
           $ref: '#/definitions/models.CostSharerModel'
         type: array
+      title:
+        type: string
     type: object
   models.CostPayerModel:
     properties:
@@ -70,6 +72,8 @@ definitions:
       description:
         type: string
       id:
+        type: string
+      title:
         type: string
     type: object
   models.CostSharerModel:
@@ -198,12 +202,15 @@ definitions:
         items:
           $ref: '#/definitions/validators.CostSharerRequest'
         type: array
+      title:
+        type: string
     required:
     - amount
     - book_id
     - currency
     - payers
     - sharers
+    - title
     type: object
   validators.CreateUserRequest:
     properties:

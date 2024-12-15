@@ -671,6 +671,9 @@
                     "items": {
                         "$ref": "#/definitions/models.CostSharerModel"
                     }
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
@@ -710,6 +713,9 @@
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -886,7 +892,8 @@
                 "book_id",
                 "currency",
                 "payers",
-                "sharers"
+                "sharers",
+                "title"
             ],
             "properties": {
                 "amount": {
@@ -912,6 +919,9 @@
                     "items": {
                         "$ref": "#/definitions/validators.CostSharerRequest"
                     }
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },

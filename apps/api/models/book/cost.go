@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -13,6 +14,7 @@ import (
 type CostRecordModel struct {
 	ID          string    `json:"id"`
 	BookID      string    `json:"book_id"`
+	Title       string    `json:"title"`
 	Amount      float32   `json:"amount"`
 	Description *string   `json:"description"`
 	CreatorID   string    `json:"creator_id"`
@@ -46,9 +48,27 @@ func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sh
 	}
 	defer tx.Rollback(context.Background())
 
+	// Step 1: Check if the creator is a member of the book
+	isMemberQuery := `
+		SELECT EXISTS (
+			SELECT 1
+			FROM book_members
+			WHERE book_id = $1 AND user_id = $2
+		)
+	`
+	var isMember bool
+	err = tx.QueryRow(context.Background(), isMemberQuery, cost.BookID, cost.CreatorID).Scan(&isMember)
+	if err != nil {
+		return fmt.Errorf("failed to check membership: %w", err)
+	}
+	if !isMember {
+		return fmt.Errorf("user %s is not a member of book %s", cost.CreatorID, cost.BookID)
+	}
+
+	// Step 2: Insert the cost record
 	query := `
-		INSERT INTO cost_records (book_id, amount, description, creator_id, currency)
-		VALUES ($1, $2, $3, $4, $5)
+		INSERT INTO cost_records (book_id, title, amount, description, creator_id, currency)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id, created_at
 	`
 
@@ -56,6 +76,7 @@ func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sh
 		context.Background(),
 		query,
 		cost.BookID,
+		cost.Title,
 		cost.Amount,
 		cost.Description,
 		cost.CreatorID,
@@ -69,16 +90,17 @@ func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sh
 		return err
 	}
 
-	// Insert payers
+	// Step 3: Insert payers
 	if err := insertPayers(tx, cost.ID, payers); err != nil {
 		return err
 	}
 
-	// Insert sharers
+	// Step 4: Insert sharers
 	if err := insertSharers(tx, cost.ID, sharers); err != nil {
 		return err
 	}
 
+	// Step 5: Commit the transaction
 	return tx.Commit(context.Background())
 }
 
@@ -94,7 +116,7 @@ func GetCostListByBookID(bookID, userID string) ([]CostRecordModel, error) {
 
 	// Fetch costs associated with the bookID
 	query := `
-		SELECT id, book_id, amount, description, creator_id, currency, created_at
+		SELECT id, book_id, title, amount, description, creator_id, currency, created_at
 		FROM cost_records
 		WHERE book_id = $1
 		ORDER BY created_at DESC
@@ -113,6 +135,7 @@ func GetCostListByBookID(bookID, userID string) ([]CostRecordModel, error) {
 		err := rows.Scan(
 			&cost.ID,
 			&cost.BookID,
+			&cost.Title,
 			&cost.Amount,
 			&cost.Description,
 			&cost.CreatorID,
@@ -142,6 +165,7 @@ func GetCostDetail(bookID, costID, userID string) (*CostDetail, error) {
 		SELECT
 			c.id AS cost_id,
 			c.book_id,
+			c.title,
 			c.amount,
 			c.description,
 			c.creator_id,
@@ -181,6 +205,7 @@ func GetCostDetail(bookID, costID, userID string) (*CostDetail, error) {
 		err := rows.Scan(
 			&cost.ID,
 			&cost.BookID,
+			&cost.Title,
 			&cost.Amount,
 			&cost.Description,
 			&cost.CreatorID,
