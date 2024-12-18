@@ -654,6 +654,9 @@
                 "currency": {
                     "type": "string"
                 },
+                "date": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -707,6 +710,9 @@
                     "type": "string"
                 },
                 "currency": {
+                    "type": "string"
+                },
+                "date": {
                     "type": "string"
                 },
                 "description": {
@@ -891,6 +897,7 @@
                 "amount",
                 "book_id",
                 "currency",
+                "date",
                 "payers",
                 "sharers",
                 "title"
@@ -903,6 +910,9 @@
                     "type": "string"
                 },
                 "currency": {
+                    "type": "string"
+                },
+                "date": {
                     "type": "string"
                 },
                 "description": {

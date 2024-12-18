@@ -19,6 +19,7 @@ type CostRecordModel struct {
 	Description *string   `json:"description"`
 	CreatorID   string    `json:"creator_id"`
 	Currency    string    `json:"currency"`
+	Date        time.Time `json:"date"`
 	CreatedAt   time.Time `json:"created_at"`
 }
 
@@ -67,8 +68,8 @@ func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sh
 
 	// Step 2: Insert the cost record
 	query := `
-		INSERT INTO cost_records (book_id, title, amount, description, creator_id, currency)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO cost_records (book_id, title, amount, description, creator_id, currency, date)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id, created_at
 	`
 
@@ -81,6 +82,7 @@ func (cost *CostRecordModel) CreateCost(payers []validators.CostPayerRequest, sh
 		cost.Description,
 		cost.CreatorID,
 		cost.Currency,
+		cost.Date,
 	).Scan(
 		&cost.ID,
 		&cost.CreatedAt,
@@ -116,7 +118,7 @@ func GetCostListByBookID(bookID, userID string) ([]CostRecordModel, error) {
 
 	// Fetch costs associated with the bookID
 	query := `
-		SELECT id, book_id, title, amount, description, creator_id, currency, created_at
+		SELECT id, book_id, title, amount, description, creator_id, currency, date, created_at
 		FROM cost_records
 		WHERE book_id = $1
 		ORDER BY created_at DESC
@@ -140,6 +142,7 @@ func GetCostListByBookID(bookID, userID string) ([]CostRecordModel, error) {
 			&cost.Description,
 			&cost.CreatorID,
 			&cost.Currency,
+			&cost.Date,
 			&cost.CreatedAt,
 		)
 
@@ -170,6 +173,7 @@ func GetCostDetail(bookID, costID, userID string) (*CostDetail, error) {
 			c.description,
 			c.creator_id,
 			c.currency,
+			c.date,
 			c.created_at,
 			cp.user_id AS payer_id,
 			cp.amount AS payer_amount,
@@ -210,6 +214,7 @@ func GetCostDetail(bookID, costID, userID string) (*CostDetail, error) {
 			&cost.Description,
 			&cost.CreatorID,
 			&cost.Currency,
+			&cost.Date,
 			&cost.CreatedAt,
 			&payerUserID,
 			&payerAmount,

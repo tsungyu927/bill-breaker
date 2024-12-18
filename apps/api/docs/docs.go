@@ -661,6 +661,9 @@ const docTemplate = `{
                 "currency": {
                     "type": "string"
                 },
+                "date": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -714,6 +717,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "currency": {
+                    "type": "string"
+                },
+                "date": {
                     "type": "string"
                 },
                 "description": {
@@ -898,6 +904,7 @@ const docTemplate = `{
                 "amount",
                 "book_id",
                 "currency",
+                "date",
                 "payers",
                 "sharers",
                 "title"
@@ -910,6 +917,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "currency": {
+                    "type": "string"
+                },
+                "date": {
                     "type": "string"
                 },
                 "description": {

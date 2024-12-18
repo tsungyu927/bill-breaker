@@ -52,6 +52,7 @@ func CreateNewCost(c *gin.Context) {
 		Description: req.Description,
 		CreatorID:   creatorID,
 		Currency:    req.Currency,
+		Date:        req.Date,
 	}
 
 	err := cost.CreateCost(req.Payers, req.Sharers)

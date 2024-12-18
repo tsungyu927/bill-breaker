@@ -1,5 +1,7 @@
 package validators
 
+import "time"
+
 type CostPayerRequest struct {
 	UserID string  `json:"user_id" validate:"required,uuid4"`
 	Amount float32 `json:"amount" validate:"required,number"`
@@ -16,6 +18,7 @@ type CreateCostRequest struct {
 	Amount      float32             `json:"amount" validate:"required,number"`
 	Description *string             `json:"description" validate:"omitempty"`
 	Currency    string              `json:"currency" validate:"required"`
+	Date        time.Time           `json:"date" validate:"required"`
 	Payers      []CostPayerRequest  `json:"payers" validate:"required"`
 	Sharers     []CostSharerRequest `json:"sharers" validate:"required"`
 }
