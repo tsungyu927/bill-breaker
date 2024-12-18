@@ -21,36 +21,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
+import useClipboard from "@/hooks/useClipboard";
 
 export default function Settings() {
   const { userId } = useUser();
   const { setTheme } = useTheme();
   const { toast } = useToast();
-
-  const handleCopyID = () => {
-    if (userId) {
-      navigator.clipboard
-        .writeText(userId)
-        .then(() => {
-          toast({
-            title: "Copied!",
-            duration: 2000,
-          });
-        })
-        .catch((error) => {
-          console.log("Failed to copy text to clipboard: ", error);
-        });
-    }
-  };
+  const { ref, copy } = useClipboard({
+    onSuccess: () => {
+      toast({
+        title: "Copied!",
+        duration: 2000,
+      });
+    },
+    onError: (error) => {
+      console.log("Failed to copy text to clipboard: ", error);
+    },
+  });
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="absolute top-2 right-2"
-        >
+        <Button variant="outline" size="icon">
           <GearIcon />
         </Button>
       </DialogTrigger>
@@ -71,13 +63,8 @@ export default function Settings() {
             <Label htmlFor="userId" className="whitespace-nowrap">
               UserID
             </Label>
-            <Input id="userId" value={userId ?? ""} readOnly />
-            <Button
-              type="submit"
-              size="sm"
-              className="px-3"
-              onClick={handleCopyID}
-            >
+            <Input id="userId" ref={ref} value={userId ?? ""} readOnly />
+            <Button type="submit" size="sm" className="px-3" onClick={copy}>
               <CopyIcon className="h-4 w-4" />
             </Button>
           </div>
