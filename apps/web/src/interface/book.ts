@@ -23,6 +23,7 @@ export interface Cost {
   title: string;
   amount: number;
   currency: string;
+  date: Date;
   creatorId: string;
   createdAt: string;
   description?: string;
@@ -47,6 +48,7 @@ export type JoinBookForm = Pick<Book, "id">;
 // Create cost form
 export interface CreateCostForm
   extends Omit<Cost, "id" | "creatorId" | "createdAt"> {
+  time: Date;
   payers: CostMember[];
   sharers: CostMember[];
 }

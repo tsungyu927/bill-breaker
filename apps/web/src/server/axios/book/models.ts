@@ -15,6 +15,7 @@ export interface CostModel {
   title: string;
   amount: number;
   currency: string;
+  date: string;
   created_at: string;
   creator_id: string;
   description?: string;

@@ -13,6 +13,8 @@ import {
   CreateCostPayload,
   JoinBookPayload,
 } from "./models";
+import { formatISO, parseISO } from "date-fns";
+import { combineDateTime } from "@/utils/datetime";
 
 export const convertBookModelToBook = (bookModel: BookModel): Book => ({
   id: bookModel.id,
@@ -32,6 +34,7 @@ export const convertBookDetailModelToBookDetail = (
     title: cost.title,
     amount: cost.amount,
     currency: cost.currency,
+    date: parseISO(cost.date),
     creatorId: cost.creator_id,
     createdAt: cost.created_at,
     description: cost.description,
@@ -73,6 +76,7 @@ export const convertToCreateCostPayload = (
   amount: cost.amount,
   currency: cost.currency,
   description: cost.description,
+  date: formatISO(combineDateTime(cost.date, cost.time)),
   payers: cost.payers.map((item) => ({
     user_id: item.userId,
     amount: item.amount,

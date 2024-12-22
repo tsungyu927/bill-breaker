@@ -32,6 +32,16 @@ import MemberSelectList from "./MemberSelectList";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCost } from "@/server/axios/book";
+import DatePicker from "@/modules/DatePicker";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import TimePicker from "@/modules/TimePicker";
 
 interface Props {
   bookId: string;
@@ -59,6 +69,8 @@ function CreateCostDialog(props: Props) {
     title: "",
     amount: 0,
     currency: "TWD",
+    date: new Date(),
+    time: new Date(),
     payers: members.map((member) => ({ userId: member.userId, amount: 0 })),
     sharers: members.map((member) => ({ userId: member.userId, amount: 0 })),
   };
@@ -107,6 +119,84 @@ function CreateCostDialog(props: Props) {
                       </FormItem>
                     )}
                   />
+                  <div className="w-full flex gap-4">
+                    <FormField
+                      control={form.control}
+                      name="date"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel required>Date</FormLabel>
+                          <Popover modal>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "yyyy-MM-dd")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <DatePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="time"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel required>Time</FormLabel>
+                          <Popover modal>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "HH:mm")
+                                  ) : (
+                                    <span>Pick a time</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-[--radix-popover-trigger-width] p-0"
+                              align="end"
+                            >
+                              <TimePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className="w-full flex gap-4">
                     <FormField
                       control={form.control}
