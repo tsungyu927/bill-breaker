@@ -5,7 +5,7 @@ import { Params, useLocation, useMatches, useNavigate } from "react-router-dom";
 import Settings from "./Settings";
 
 const resolvePath = (path: string, params?: Params<string>) => {
-  return path.replace(/\/:([^/]+)/g, (match, key) => {
+  return path.replace(/\/:([^/]+)/g, (_match, key) => {
     return `/${params?.[key] || ""}`;
   });
 };

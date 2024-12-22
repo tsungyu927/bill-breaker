@@ -26,7 +26,7 @@ function DatePicker(props: Props) {
         mode="single"
         selected={date}
         onSelect={handleDateSelect}
-        autoFocus
+        initialFocus
       />
     </div>
   );
