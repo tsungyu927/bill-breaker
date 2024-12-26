@@ -1,6 +1,9 @@
 package validators
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type CostPayerRequest struct {
 	UserID string  `json:"user_id" validate:"required,uuid4"`
@@ -34,6 +37,28 @@ type GetCostDetailRequest struct {
 
 func ValidateCreateCost(data CreateCostRequest) error {
 	return validate.Struct(data)
+}
+
+func ValidateCost(request CreateCostRequest) error {
+	var totalPayerAmount float32
+	for _, payer := range request.Payers {
+		totalPayerAmount += payer.Amount
+	}
+
+	if totalPayerAmount != request.Amount {
+		return errors.New("Total payer amount does not equal the given amount")
+	}
+
+	var totalSharerAmount float32
+	for _, sharer := range request.Sharers {
+		totalSharerAmount += sharer.ShareAmount
+	}
+
+	if totalSharerAmount != request.Amount {
+		return errors.New("Total sharer amount does not equal the given amount")
+	}
+
+	return nil
 }
 
 func ValidateGetCostList(data GetCostListRequest) error {

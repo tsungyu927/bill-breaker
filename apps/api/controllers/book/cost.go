@@ -45,6 +45,12 @@ func CreateNewCost(c *gin.Context) {
 		return
 	}
 
+	if err := validators.ValidateCost(req); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, utils.ErrorResponse(err.Error()))
+		return
+	}
+
 	cost := models.CostRecordModel{
 		BookID:      req.BookID,
 		Title:       req.Title,
