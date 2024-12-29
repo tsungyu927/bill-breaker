@@ -17,6 +17,7 @@ import { type BookDetail } from "@/interface/book";
 import Loading from "@/modules/Loading";
 import CreateCostDialog from "@/modules/book/createCost";
 import { CostCard } from "@/modules/book/card";
+import LeaveBookDialog from "@/modules/book/leaveBook/LeaveBookDialog";
 
 function BookDetail() {
   const { bookId } = useParams();
@@ -76,7 +77,7 @@ function BookDetail() {
           </div>
         </CardContent>
       </Card>
-      <ScrollArea className="w-full flex-grow rounded-md border">
+      <ScrollArea className="w-full rounded-md border">
         {costs.map((cost) => {
           const creator = members.find(
             (member) => member.userId === cost.creatorId
@@ -96,7 +97,10 @@ function BookDetail() {
           );
         })}
       </ScrollArea>
-      <CreateCostDialog bookId={bookId} members={members} />
+      <div className="w-full flex flex-col gap-1">
+        <CreateCostDialog bookId={bookId} members={members} />
+        <LeaveBookDialog />
+      </div>
     </div>
   );
 }

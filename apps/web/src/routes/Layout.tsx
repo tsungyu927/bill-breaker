@@ -35,7 +35,7 @@ function Layout() {
     <ThemeProvider>
       <div className="w-dvw h-dvh flex flex-col">
         <Header />
-        <div className="w-full flex-grow">
+        <div className="w-full h-[calc(100%-64px)]">
           <Outlet />
         </div>
         <RegisterDialog open={!userId} onSubmit={handleRegisterSubmit} />

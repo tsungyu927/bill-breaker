@@ -14,6 +14,7 @@ import {
   CreateCostResponse,
   JoinBookPayload,
   JoinBookResponse,
+  LeaveBookResponse,
 } from "./models";
 
 export const createBook = async (payload: CreateBookPayload) => {
@@ -47,19 +48,12 @@ export const fetchBookByBookId = async (bookId: string) => {
   return null;
 };
 
-export const fetchCostDetail = async (bookId: string, costId: string) => {
-  const { data } = await axiosInstance.get<CostDetailResponse>(
-    `api/v1/book/${bookId}/cost/${costId}`
-  );
-
-  if (data.data) {
-    return convertCostDetailModelToCostDetail(data.data);
-  }
-  return null;
-};
-
 export const joinBook = async (payload: JoinBookPayload) => {
   return axiosInstance.post<JoinBookResponse>(`api/v1/book/join`, payload);
+};
+
+export const leaveBook = async (bookId: string) => {
+  return axiosInstance.delete<LeaveBookResponse>(`api/v1/book/${bookId}/leave`);
 };
 
 // Cost
@@ -70,4 +64,15 @@ export const createCost = async (payload: CreateCostPayload) => {
   );
 
   return data.data;
+};
+
+export const fetchCostDetail = async (bookId: string, costId: string) => {
+  const { data } = await axiosInstance.get<CostDetailResponse>(
+    `api/v1/book/${bookId}/cost/${costId}`
+  );
+
+  if (data.data) {
+    return convertCostDetailModelToCostDetail(data.data);
+  }
+  return null;
 };

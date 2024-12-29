@@ -33,7 +33,7 @@ function Header() {
   };
 
   return (
-    <header className="flex h-16 w-full items-center border-b border-gray-200 dark:border-gray-800">
+    <header className="flex min-h-16 w-full items-center border-b border-gray-200 dark:border-gray-800">
       <div className="mx-auto max-w-7xl w-full px-4 md:px-6 grid grid-cols-3">
         <div className="flex justify-start">
           {goBackPath && (
