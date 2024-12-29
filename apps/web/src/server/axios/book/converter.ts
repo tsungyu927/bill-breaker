@@ -2,6 +2,7 @@ import {
   Book,
   BookDetail,
   Cost,
+  CostDetail,
   CreateBookForm,
   CreateCostForm,
   JoinBookForm,
@@ -9,6 +10,7 @@ import {
 import {
   BookDetailModel,
   BookModel,
+  CostDetailModel,
   CreateBookPayload,
   CreateCostPayload,
   JoinBookPayload,
@@ -54,6 +56,28 @@ export const convertBookDetailModelToBookDetail = (
     lastModifiedAt: bookDetailModel.last_modified_at,
   };
 };
+
+export const convertCostDetailModelToCostDetail = (
+  costDetailModel: CostDetailModel
+): CostDetail => ({
+  id: costDetailModel.id,
+  bookId: costDetailModel.book_id,
+  title: costDetailModel.title,
+  amount: costDetailModel.amount,
+  currency: costDetailModel.currency,
+  date: parseISO(costDetailModel.date),
+  creatorId: costDetailModel.creator_id,
+  createdAt: costDetailModel.created_at,
+  description: costDetailModel.description,
+  payers: costDetailModel.payers.map((item) => ({
+    userId: item.user_id,
+    amount: item.amount,
+  })),
+  sharers: costDetailModel.sharers.map((item) => ({
+    userId: item.user_id,
+    amount: item.share_amount,
+  })),
+});
 
 export const convertToCreateBookPayload = (
   book: CreateBookForm

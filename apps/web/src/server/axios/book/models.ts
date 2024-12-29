@@ -51,6 +51,7 @@ export interface CostDetailModel extends CostModel {
 export type CreateBookResponse = APIResponse<BookModel>;
 export type BookListResponse = APIResponse<BookModel[]>;
 export type BookResponse = APIResponse<BookDetailModel>;
+export type CostDetailResponse = APIResponse<CostDetailModel>;
 export type JoinBookResponse = APIResponse<string>;
 export type CreateCostResponse = APIResponse<{ id: string }>;
 

@@ -2,10 +2,12 @@ import axiosInstance from "..";
 import {
   convertBookDetailModelToBookDetail,
   convertBookModelToBook,
+  convertCostDetailModelToCostDetail,
 } from "./converter";
 import {
   BookListResponse,
   BookResponse,
+  CostDetailResponse,
   CreateBookPayload,
   CreateBookResponse,
   CreateCostPayload,
@@ -41,6 +43,17 @@ export const fetchBookByBookId = async (bookId: string) => {
 
   if (data.data) {
     return convertBookDetailModelToBookDetail(data.data);
+  }
+  return null;
+};
+
+export const fetchCostDetail = async (bookId: string, costId: string) => {
+  const { data } = await axiosInstance.get<CostDetailResponse>(
+    `api/v1/book/${bookId}/cost/${costId}`
+  );
+
+  if (data.data) {
+    return convertCostDetailModelToCostDetail(data.data);
   }
   return null;
 };

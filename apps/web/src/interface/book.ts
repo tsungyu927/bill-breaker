@@ -29,6 +29,11 @@ export interface Cost {
   description?: string;
 }
 
+export interface CostDetail extends Cost {
+  payers: CostMember[];
+  sharers: CostMember[];
+}
+
 export interface BookDetail extends Book {
   members: BookMember[];
   costs: Cost[];
